@@ -175,12 +175,34 @@
         <div style="background:rgba(255,255,255,0.02);border:1px solid rgba(255,255,255,0.06);border-radius:20px;padding:24px;margin-bottom:20px;">
           <h6 style="font-weight:800;font-size:0.95rem;margin-bottom:16px;">Weekly Revenue</h6>
           <div style="display:flex;align-items:flex-end;gap:8px;height:80px;">
-            <c:forEach var="day" items="${['Mon','Tue','Wed','Thu','Fri','Sat','Sun']}">
-              <div style="flex:1;display:flex;flex-direction:column;align-items:center;gap:4px;">
+              <div style="flex:1;display:flex;flex-direction:column;align-items:center;gap:4px;" title="Revenue">
                 <div style="width:100%;background:linear-gradient(to top,#ff4500,#ffd700);border-radius:4px 4px 0 0;height:20px;transition:all 0.5s;" title="Revenue"></div>
-                <span style="font-size:0.65rem;color:rgba(255,255,255,1.0);">${day}</span>
+                <span style="font-size:0.65rem;color:rgba(255,255,255,1.0);">Mon</span>
               </div>
-            </c:forEach>
+              <div style="flex:1;display:flex;flex-direction:column;align-items:center;gap:4px;" title="Revenue">
+                <div style="width:100%;background:linear-gradient(to top,#ff4500,#ffd700);border-radius:4px 4px 0 0;height:20px;transition:all 0.5s;" title="Revenue"></div>
+                <span style="font-size:0.65rem;color:rgba(255,255,255,1.0);">Tue</span>
+              </div>
+              <div style="flex:1;display:flex;flex-direction:column;align-items:center;gap:4px;" title="Revenue">
+                <div style="width:100%;background:linear-gradient(to top,#ff4500,#ffd700);border-radius:4px 4px 0 0;height:20px;transition:all 0.5s;" title="Revenue"></div>
+                <span style="font-size:0.65rem;color:rgba(255,255,255,1.0);">Wed</span>
+              </div>
+              <div style="flex:1;display:flex;flex-direction:column;align-items:center;gap:4px;" title="Revenue">
+                <div style="width:100%;background:linear-gradient(to top,#ff4500,#ffd700);border-radius:4px 4px 0 0;height:20px;transition:all 0.5s;" title="Revenue"></div>
+                <span style="font-size:0.65rem;color:rgba(255,255,255,1.0);">Thu</span>
+              </div>
+              <div style="flex:1;display:flex;flex-direction:column;align-items:center;gap:4px;" title="Revenue">
+                <div style="width:100%;background:linear-gradient(to top,#ff4500,#ffd700);border-radius:4px 4px 0 0;height:20px;transition:all 0.5s;" title="Revenue"></div>
+                <span style="font-size:0.65rem;color:rgba(255,255,255,1.0);">Fri</span>
+              </div>
+              <div style="flex:1;display:flex;flex-direction:column;align-items:center;gap:4px;" title="Revenue">
+                <div style="width:100%;background:linear-gradient(to top,#ff4500,#ffd700);border-radius:4px 4px 0 0;height:20px;transition:all 0.5s;" title="Revenue"></div>
+                <span style="font-size:0.65rem;color:rgba(255,255,255,1.0);">Sat</span>
+              </div>
+              <div style="flex:1;display:flex;flex-direction:column;align-items:center;gap:4px;" title="Revenue">
+                <div style="width:100%;background:linear-gradient(to top,#ff4500,#ffd700);border-radius:4px 4px 0 0;height:20px;transition:all 0.5s;" title="Revenue"></div>
+                <span style="font-size:0.65rem;color:rgba(255,255,255,1.0);">Sun</span>
+              </div>
             <!-- Fallback static bars -->
             <script>
               (function() {
