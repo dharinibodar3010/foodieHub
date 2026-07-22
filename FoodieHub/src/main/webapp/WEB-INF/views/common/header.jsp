@@ -25,11 +25,11 @@
 
 <style>
   :root {
-    --primary: #FF4B2B; /* Orange */
-    --primary-dark: #E03E21;
-    --primary-light: #FF6647;
-    --secondary: #FFD700; /* Gold */
-    --accent: #FBBF24; /* Gold/Yellow */
+    --primary: #FF5E00; /* Glossy Orange */
+    --primary-dark: #E65100;
+    --primary-light: #FF8A22;
+    --secondary: #FFD700; /* Golden Yellow */
+    --accent: #FFEA00; /* Bright Golden Yellow */
     --dark: #000000; /* Pure Black Background */
     --dark-card: #111111; /* Slightly lighter black for cards */
     --dark-surface: #222222; 
@@ -37,11 +37,12 @@
     --text-primary: #ffffff; /* Pure White */
     --text-secondary: #cccccc; 
     --text-muted: #999999; 
-    --gradient-main: linear-gradient(135deg, #FF4B2B 0%, #FFD700 100%);
+    --gradient-main: linear-gradient(135deg, #FF5E00 0%, #FFD700 100%);
+    --gradient-gold: linear-gradient(135deg, #FFD700 0%, #FFA000 100%);
     --gradient-dark: linear-gradient(135deg, #111111 0%, #000000 100%);
     --glass-bg: rgba(10, 10, 10, 0.7);
-    --glass-border: rgba(255, 215, 0, 0.15); /* Gold tinted glass border */
-    --shadow-glow: 0 4px 20px rgba(255, 75, 43, 0.3);
+    --glass-border: rgba(255, 215, 0, 0.3); /* Glossy gold tinted glass border */
+    --shadow-glow: 0 8px 32px rgba(255, 94, 0, 0.4);
     --shadow-card: 0 10px 30px rgba(0, 0, 0, 0.6);
     --radius-lg: 16px;
     --radius-md: 12px;
@@ -638,6 +639,48 @@
 </style>
 </head>
 <body>
+
+<!-- Splash Screen Loader (Runs once per session) -->
+<div id="app-loader" style="position:fixed; top:0; left:0; width:100%; height:100%; background:var(--dark); z-index:99999; display:none; flex-direction:column; align-items:center; justify-content:center; transition:opacity 0.5s ease;">
+  
+  <!-- Modern CSS Loader -->
+  <div style="position:relative; width:80px; height:80px; margin-bottom:10px;">
+    <style>
+      @keyframes spin-ring { 100% { transform: rotate(360deg); } }
+      @keyframes spin-ring-rev { 100% { transform: rotate(-360deg); } }
+    </style>
+    <div style="position:absolute; width:100%; height:100%; border:4px solid transparent; border-top-color:#FF5E00; border-bottom-color:#FFD700; border-radius:50%; animation:spin-ring 1s linear infinite; box-shadow: 0 0 15px rgba(255,94,0,0.3);"></div>
+    <div style="position:absolute; width:60%; height:60%; top:20%; left:20%; border:4px solid transparent; border-left-color:#FFD700; border-right-color:#FF5E00; border-radius:50%; animation:spin-ring-rev 0.8s linear infinite;"></div>
+    <i class="fas fa-utensils" style="position:absolute; top:50%; left:50%; transform:translate(-50%, -50%); color:#FFD700; font-size:1.2rem; filter:drop-shadow(0 0 5px rgba(255,215,0,0.5));"></i>
+  </div>
+  
+  <h2 style="margin-top:30px; font-weight:800; background:var(--gradient-main); -webkit-background-clip:text; -webkit-text-fill-color:transparent; font-size:2.2rem; animation: pulse-glow 2s infinite;">FoodieHub</h2>
+  <p style="color:var(--text-secondary); margin-top:5px; font-size:1rem; letter-spacing: 1px;">Preparing your delicious experience...</p>
+</div>
+
+<script>
+  var isAdminPanel = ${not empty hideNavbar};
+  var sessionKey = isAdminPanel ? 'adminAppLoaded' : 'userAppLoaded';
+
+  if (!sessionStorage.getItem(sessionKey)) {
+    document.getElementById('app-loader').style.display = 'flex';
+    document.body.style.overflow = 'hidden'; // prevent scrolling while loading
+
+    window.addEventListener('load', function() {
+      setTimeout(function() {
+        var loader = document.getElementById('app-loader');
+        if (loader) {
+          loader.style.opacity = '0';
+          setTimeout(function() { 
+            loader.style.display = 'none'; 
+            document.body.style.overflow = 'auto'; // enable scrolling
+          }, 400);
+        }
+        sessionStorage.setItem(sessionKey, 'true');
+      }, 3000); // 3 seconds delay
+    });
+  }
+</script>
 
 <c:if test="${empty requestScope.hideNavbar}">
   <%@ include file="navbar.jsp"%>

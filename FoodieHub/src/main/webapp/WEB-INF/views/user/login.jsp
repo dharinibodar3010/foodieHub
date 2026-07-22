@@ -227,24 +227,6 @@
             </div>
           </c:if>
 
-          <!-- Social Login (Demo) -->
-          <div class="row g-2 mb-4">
-            <div class="col-6">
-              <a href="#" class="social-btn">
-                <img src="https://www.google.com/favicon.ico" width="18" alt="Google">
-                Google
-              </a>
-            </div>
-            <div class="col-6">
-              <a href="#" class="social-btn">
-                <i class="fab fa-facebook" style="color:#1877f2;font-size:1.1rem;"></i>
-                Facebook
-              </a>
-            </div>
-          </div>
-
-          <div class="divider-or">or continue with email</div>
-
           <!-- Login Form -->
           <form action="${pageContext.request.contextPath}/login" method="post">
 
@@ -265,7 +247,7 @@
               <label class="custom-checkbox">
                 <input type="checkbox"> Remember me
               </label>
-              <a href="#" class="forgot-link">Forgot password?</a>
+              <a href="${pageContext.request.contextPath}/forgot-password" class="forgot-link">Forgot password?</a>
             </div>
 
             <button type="submit" class="btn-primary-premium w-100 justify-content-center" style="padding:14px;">

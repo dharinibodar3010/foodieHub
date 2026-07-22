@@ -59,14 +59,27 @@
         </div>
 
         <!-- Coupon -->
-        <div style="background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.07);border-radius:18px;padding:20px;margin-top:20px;display:flex;gap:12px;">
-          <div style="position:relative;flex:1;">
-            <i class="fas fa-tag" style="position:absolute;left:14px;top:50%;transform:translateY(-50%);color:rgba(255,255,255,0.35);font-size:0.9rem;"></i>
-            <input type="text" id="couponInput" placeholder="Enter promo code (FOODIE50)" style="width:100%;background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.1);border-radius:10px;padding:12px 16px 12px 40px;color:white;font-size:0.88rem;font-family:'Poppins',sans-serif;outline:none;" onfocus="this.style.borderColor='rgba(255,69,0,0.4)'" onblur="this.style.borderColor='rgba(255,255,255,0.1)'">
+        <div style="background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.07);border-radius:18px;padding:20px;margin-top:20px;">
+          <div style="display:flex;gap:12px;margin-bottom:15px;">
+            <div style="position:relative;flex:1;">
+              <i class="fas fa-tag" style="position:absolute;left:14px;top:50%;transform:translateY(-50%);color:rgba(255,255,255,0.35);font-size:0.9rem;"></i>
+              <input type="text" id="couponInput" placeholder="Enter promo code" style="width:100%;background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.1);border-radius:10px;padding:12px 16px 12px 40px;color:white;font-size:0.88rem;font-family:'Poppins',sans-serif;outline:none;" onfocus="this.style.borderColor='rgba(255,69,0,0.4)'" onblur="this.style.borderColor='rgba(255,255,255,0.1)'">
+            </div>
+            <button onclick="applyCoupon()" style="background:linear-gradient(135deg,#ff4500,#ff8c00);border:none;border-radius:10px;padding:12px 24px;color:white;font-weight:600;font-size:0.88rem;cursor:pointer;white-space:nowrap;transition:all 0.3s;" onmouseover="this.style.transform='scale(1.02)'" onmouseout="this.style.transform='scale(1)'">
+              Apply
+            </button>
           </div>
-          <button onclick="applyCoupon()" style="background:linear-gradient(135deg,#ff4500,#ff8c00);border:none;border-radius:10px;padding:12px 24px;color:white;font-weight:600;font-size:0.88rem;cursor:pointer;white-space:nowrap;transition:all 0.3s;" onmouseover="this.style.transform='scale(1.02)'" onmouseout="this.style.transform='scale(1)'">
-            Apply
-          </button>
+          
+          <h6 style="color:rgba(255,255,255,0.8);font-size:0.9rem;margin-bottom:12px;">Available Offers</h6>
+          <div style="display:flex;flex-wrap:wrap;gap:12px;">
+            <div onclick="selectCoupon('FOODIE50')" style="background:rgba(255,69,0,0.1);border:1px dashed #ff4500;border-radius:10px;padding:10px 15px;cursor:pointer;transition:all 0.3s;flex:1;min-width:200px;" onmouseover="this.style.background='rgba(255,69,0,0.2)'" onmouseout="this.style.background='rgba(255,69,0,0.1)'">
+              <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:4px;">
+                <span style="font-weight:700;color:#ff4500;font-size:0.95rem;">FOODIE50</span>
+                <span style="background:#ff4500;color:white;padding:2px 8px;border-radius:4px;font-size:0.7rem;font-weight:600;">50% OFF</span>
+              </div>
+              <div style="font-size:0.8rem;color:rgba(255,255,255,0.7);">Get 50% discount on your order. Click to apply.</div>
+            </div>
+          </div>
         </div>
 
       </div>
@@ -105,7 +118,7 @@
             <span id="totalDisplay" style="font-size:1.5rem;font-weight:900;background:linear-gradient(135deg,#ff4500,#ffd700);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;">₹1,256</span>
           </div>
 
-          <a href="${pageContext.request.contextPath}/checkout" class="btn-primary-premium w-100 justify-content-center" style="padding:14px;font-size:1rem;text-align:center;">
+          <a href="#" onclick="proceedToCheckout(event)" class="btn-primary-premium w-100 justify-content-center" style="padding:14px;font-size:1rem;text-align:center;">
             <i class="fas fa-lock me-2"></i>Proceed to Checkout
           </a>
 
@@ -192,6 +205,11 @@ function updateSummary() {
   document.getElementById('totalDisplay').textContent = '₹' + total.toLocaleString('en-IN');
 }
 
+function selectCoupon(code) {
+  document.getElementById('couponInput').value = code;
+  applyCoupon();
+}
+
 function applyCoupon() {
   const code = document.getElementById('couponInput').value.trim().toUpperCase();
   if (code === 'FOODIE50') {
@@ -222,6 +240,16 @@ function showCartToast(msg) {
   toast.style.display = 'block';
   setTimeout(() => { toast.style.display = 'none'; }, 3000);
 }
+
+function proceedToCheckout(e) {
+  e.preventDefault();
+  let url = '${pageContext.request.contextPath}/checkout';
+  if (discountApplied) {
+    url += '?coupon=FOODIE50';
+  }
+  window.location.href = url;
+}
+
 document.addEventListener('DOMContentLoaded', updateSummary);
 </script>
 

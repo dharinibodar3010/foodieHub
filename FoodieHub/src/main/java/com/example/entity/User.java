@@ -26,19 +26,24 @@ public class User {
 
 	private String profileImage;
 
+	private String resetToken;
+
+	private String gender;
+
 	// Default Constructor
 	public User() {
 
 	}
 
 	// Parameterized Constructor
-	public User(Long id, String name, String email, String password, String mobile, String address) {
+	public User(Long id, String name, String email, String password, String mobile, String address, String gender) {
 		this.id = id;
 		this.name = name;
 		this.email = email;
 		this.password = password;
 		this.mobile = mobile;
 		this.address = address;
+		this.gender = gender;
 	}
 
 	// Getter Setter
@@ -97,6 +102,22 @@ public class User {
 
 	public void setProfileImage(String profileImage) {
 		this.profileImage = profileImage;
+	}
+
+	public String getResetToken() {
+		return resetToken;
+	}
+
+	public void setResetToken(String resetToken) {
+		this.resetToken = resetToken;
+	}
+
+	public String getGender() {
+		return gender;
+	}
+
+	public void setGender(String gender) {
+		this.gender = gender;
 	}
 
 }

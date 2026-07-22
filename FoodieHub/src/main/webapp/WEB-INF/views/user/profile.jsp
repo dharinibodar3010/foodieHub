@@ -61,15 +61,18 @@
       </c:if>
 
       <div class="profile-header">
-        <div class="profile-img-wrap">
+        <div class="profile-img-wrap" style="cursor:pointer;" onclick="document.getElementById('profileImageInput').click();">
           <c:choose>
             <c:when test="${not empty user.profileImage}">
-              <img src="${pageContext.request.contextPath}/images/${user.profileImage}" class="profile-img" alt="Profile">
+              <img id="profilePreview" src="${pageContext.request.contextPath}/images/${user.profileImage}" class="profile-img" alt="Profile">
             </c:when>
             <c:otherwise>
-              <img src="https://ui-avatars.com/api/?name=${user.name}&background=ff4500&color=fff&size=200" class="profile-img" alt="Profile">
+              <img id="profilePreview" src="https://ui-avatars.com/api/?name=${user.name}&background=ff4500&color=fff&size=200" class="profile-img" alt="Profile">
             </c:otherwise>
           </c:choose>
+          <div style="position:absolute;bottom:-10px;right:-10px;background:#ff4500;width:36px;height:36px;border-radius:50%;display:flex;align-items:center;justify-content:center;color:white;border:3px solid #12121a;transition:all 0.3s;">
+            <i class="fas fa-camera"></i>
+          </div>
         </div>
         <div class="profile-info">
           <h2>${user.name}</h2>
@@ -83,6 +86,10 @@
           <i class="fas fa-user-edit"></i> Edit Profile Details
         </div>
         <form action="${pageContext.request.contextPath}/updateProfile" method="post" enctype="multipart/form-data">
+          <!-- Hidden file input triggered by image click -->
+          <input type="file" id="profileImageInput" accept="image/*" style="display:none;" onchange="openCropper(event)">
+          <!-- Hidden file input to submit the cropped image -->
+          <input type="file" name="imageFile" id="croppedImageInput" style="display:none;">
           
           <div class="row g-4">
             <div class="col-md-6">
@@ -101,8 +108,13 @@
             </div>
 
             <div class="col-md-6">
-              <label class="form-label-premium">Profile Photo (Optional)</label>
-              <input type="file" name="imageFile" class="form-premium w-100" accept="image/*" style="padding:9px 16px;">
+              <label class="form-label-premium">Gender</label>
+              <select name="gender" class="form-premium w-100" style="padding:10px 16px;">
+                <option value="" ${empty user.gender ? 'selected' : ''}>Select Gender</option>
+                <option value="Male" ${user.gender == 'Male' ? 'selected' : ''}>Male</option>
+                <option value="Female" ${user.gender == 'Female' ? 'selected' : ''}>Female</option>
+                <option value="Other" ${user.gender == 'Other' ? 'selected' : ''}>Other</option>
+              </select>
             </div>
 
             <div class="col-12">
@@ -128,5 +140,76 @@
     </div>
   </div>
 </div>
+
+<!-- Cropper Modal -->
+<div class="modal fade" id="cropperModal" tabindex="-1" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content" style="background:#12121a;border:1px solid rgba(255,69,0,0.3);border-radius:16px;">
+      <div class="modal-header" style="border-bottom:1px solid rgba(255,255,255,0.1);">
+        <h5 class="modal-title" style="color:white;font-weight:700;">Crop Image</h5>
+        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body" style="padding:0;max-height:60vh;overflow:hidden;">
+        <img id="cropperImage" src="" style="max-width:100%;">
+      </div>
+      <div class="modal-footer" style="border-top:1px solid rgba(255,255,255,0.1);">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" style="border-radius:8px;">Cancel</button>
+        <button type="button" class="btn btn-primary" onclick="cropAndSave()" style="background:#ff4500;border:none;border-radius:8px;">Crop & Save</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Include Cropper.js -->
+<link href="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.13/cropper.min.css" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.13/cropper.min.js"></script>
+
+<script>
+let cropper;
+
+function openCropper(event) {
+  const file = event.target.files[0];
+  if (file) {
+    const reader = new FileReader();
+    reader.onload = function(e) {
+      document.getElementById('cropperImage').src = e.target.result;
+      const cropperModal = new bootstrap.Modal(document.getElementById('cropperModal'));
+      cropperModal.show();
+      
+      document.getElementById('cropperModal').addEventListener('shown.bs.modal', function () {
+        if(cropper) { cropper.destroy(); }
+        cropper = new Cropper(document.getElementById('cropperImage'), {
+          aspectRatio: 1,
+          viewMode: 1,
+          autoCropArea: 1
+        });
+      }, {once:true});
+    };
+    reader.readAsDataURL(file);
+  }
+}
+
+function cropAndSave() {
+  if (cropper) {
+    cropper.getCroppedCanvas({
+      width: 400,
+      height: 400
+    }).toBlob(function(blob) {
+      // Create a file from blob
+      const file = new File([blob], "profile_cropped.jpg", { type: "image/jpeg", lastModified: new Date().getTime() });
+      
+      // Assign the cropped file to the hidden input using DataTransfer
+      const dataTransfer = new DataTransfer();
+      dataTransfer.items.add(file);
+      document.getElementById('croppedImageInput').files = dataTransfer.files;
+      
+      // Update preview
+      document.getElementById('profilePreview').src = URL.createObjectURL(blob);
+      
+      bootstrap.Modal.getInstance(document.getElementById('cropperModal')).hide();
+    }, 'image/jpeg');
+  }
+}
+</script>
 
 <%@ include file="../common/footer.jsp"%>

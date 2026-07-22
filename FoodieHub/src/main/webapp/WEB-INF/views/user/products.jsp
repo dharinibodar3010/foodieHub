@@ -160,9 +160,19 @@
   .product-name {
     font-weight: 700;
     font-size: 1rem;
-    margin-bottom: 8px;
+    margin-bottom: 4px;
     color: white;
   }
+
+  .product-rating {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    margin-bottom: 8px;
+    font-size: 0.8rem;
+  }
+  .product-rating i { color: #FFD700; }
+  .product-rating span { color: rgba(255,255,255,0.6); font-size: 0.75rem; margin-left: 4px; }
 
   .product-desc {
     color: rgba(255,255,255,0.45);
@@ -325,10 +335,17 @@
                 </div>
               </div>
               <div class="product-body">
-                <div class="product-category">
+                <div class="product-rating">
                   <c:choose>
-                    <c:when test="${p.category != null}">${p.category.name}</c:when>
-                    <c:otherwise>Food</c:otherwise>
+                    <c:when test="${p.reviewCount > 0}">
+                      <i class="fas fa-star"></i>
+                      <strong>${p.averageRating}</strong>
+                      <span>(${p.reviewCount} reviews)</span>
+                    </c:when>
+                    <c:otherwise>
+                      <i class="far fa-star"></i>
+                      <span>No reviews yet</span>
+                    </c:otherwise>
                   </c:choose>
                 </div>
                 <div class="product-name">${p.name}</div>
@@ -336,11 +353,14 @@
                 <div class="product-footer">
                   <span class="product-price">₹${p.price}</span>
                   <c:if test="${p.available}">
-                    <form action="${pageContext.request.contextPath}/addToCart" method="post" style="margin:0;">
+                    <form action="${pageContext.request.contextPath}/addToCart" method="post" style="margin:0;display:flex;gap:6px;">
+                      <button type="button" class="btn-add-cart" style="background:rgba(255,255,255,0.1);color:#fff;" onclick="openReviewModal(${p.id}, '${p.name}')" title="Rate Product">
+                        <i class="fas fa-star" style="color:#FFD700;"></i>
+                      </button>
                       <input type="hidden" name="productId" value="${p.id}">
                       <input type="hidden" name="quantity" value="1">
                       <button type="submit" class="btn-add-cart">
-                        <i class="fas fa-plus"></i> Add to Cart
+                        <i class="fas fa-plus"></i> Add
                       </button>
                     </form>
                   </c:if>
@@ -360,9 +380,9 @@
       <div class="no-products">
         <i class="fas fa-utensils"></i>
         <h4 style="font-weight:700;margin-bottom:8px;">No Items Found</h4>
-        <p style="font-size:0.9rem;">Products will appear here once added by admin.</p>
-        <a href="${pageContext.request.contextPath}/" class="btn-primary-premium mt-3" style="width: 180px; padding: 12px; margin: 0 auto; display: block; text-align: center;">
-          <i class="fas fa-home"></i> Go Home
+        <p style="font-size:0.9rem;margin-bottom:20px;">Products will appear here once added by admin.</p>
+        <a href="${pageContext.request.contextPath}/" style="padding: 6px 14px; font-size: 0.75rem; display: inline-flex; align-items: center; justify-content: center; width: fit-content; border-radius: 30px; text-decoration: none; color: white; font-weight: 600; background: linear-gradient(135deg, #ff4500, #ff8c00); gap: 6px; box-shadow: 0 4px 10px rgba(255,69,0,0.3); margin: 0 auto;">
+          <i class="fas fa-home" style="font-size: 0.7rem;"></i> Go Home
         </a>
       </div>
     </c:otherwise>
@@ -370,7 +390,50 @@
 
 </div>
 
+<!-- Review Modal -->
+<div id="reviewModal" style="display:none;position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,0.8);backdrop-filter:blur(5px);z-index:9999;align-items:center;justify-content:center;">
+  <div style="background:rgba(30,30,40,0.95);border:1px solid rgba(255,69,0,0.3);border-radius:24px;width:90%;max-width:400px;padding:32px;box-shadow:0 20px 60px rgba(0,0,0,0.5);">
+    <h4 style="color:white;font-weight:800;margin-bottom:8px;text-align:center;">Rate Food</h4>
+    <p id="reviewProductName" style="color:#ff8c00;font-size:0.9rem;text-align:center;margin-bottom:24px;"></p>
+    
+    <form action="${pageContext.request.contextPath}/addReview" method="post" onsubmit="return validateReviewForm()">
+      <input type="hidden" name="productId" id="reviewProductId">
+      
+      <div style="display:flex;justify-content:center;gap:8px;margin-bottom:24px;" id="starContainer">
+        <i class="far fa-star rating-star" data-val="1" style="color:#FFD700;font-size:1.8rem;cursor:pointer;"></i>
+        <i class="far fa-star rating-star" data-val="2" style="color:#FFD700;font-size:1.8rem;cursor:pointer;"></i>
+        <i class="far fa-star rating-star" data-val="3" style="color:#FFD700;font-size:1.8rem;cursor:pointer;"></i>
+        <i class="far fa-star rating-star" data-val="4" style="color:#FFD700;font-size:1.8rem;cursor:pointer;"></i>
+        <i class="far fa-star rating-star" data-val="5" style="color:#FFD700;font-size:1.8rem;cursor:pointer;"></i>
+      </div>
+      <input type="hidden" name="rating" id="reviewRatingInput" value="0">
+      
+      <div style="margin-bottom:24px;">
+        <textarea name="comment" id="reviewCommentInput" rows="3" placeholder="Tell us how it tasted..." style="width:100%;background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.1);border-radius:12px;padding:12px;color:white;font-size:0.9rem;outline:none;resize:none;" required></textarea>
+      </div>
+      
+      <div style="display:flex;gap:12px;">
+        <button type="button" onclick="closeReviewModal()" style="flex:1;background:rgba(255,255,255,0.1);border:none;color:white;padding:12px;border-radius:12px;font-weight:600;cursor:pointer;transition:all 0.3s;">Cancel</button>
+        <button type="submit" id="submitReviewBtn" style="flex:1;background:linear-gradient(135deg,#ff4500,#ff8c00);border:none;color:white;padding:12px;border-radius:12px;font-weight:600;cursor:pointer;box-shadow:0 4px 15px rgba(255,69,0,0.4);transition:all 0.3s;">Submit Review</button>
+      </div>
+    </form>
+  </div>
+</div>
+
 <script>
+function validateReviewForm() {
+  if (document.getElementById('reviewRatingInput').value == "0") {
+    alert("Please select a star rating!");
+    return false;
+  }
+  
+  const submitBtn = document.getElementById('submitReviewBtn');
+  submitBtn.disabled = true;
+  submitBtn.innerText = "Submitting...";
+  submitBtn.style.opacity = "0.7";
+  
+  return true;
+}
 function filterProducts() {
   const search = document.getElementById('searchInput').value.toLowerCase().trim();
   const selectedCat = document.getElementById('categoryFilter').value.toLowerCase();
@@ -416,6 +479,51 @@ function filterProducts() {
   });
 
   document.getElementById('resultCount').textContent = count;
+}
+
+window.onload = function() {
+  document.getElementById('resultCount').textContent = document.querySelectorAll('.product-item').length;
+  
+  // Star rating logic
+  const stars = document.querySelectorAll('.rating-star');
+  const ratingInput = document.getElementById('reviewRatingInput');
+  
+  stars.forEach(star => {
+    star.addEventListener('click', function() {
+      const val = parseInt(this.getAttribute('data-val'));
+      ratingInput.value = val;
+      stars.forEach(s => {
+        if(parseInt(s.getAttribute('data-val')) <= val) {
+          s.classList.remove('far');
+          s.classList.add('fas');
+        } else {
+          s.classList.remove('fas');
+          s.classList.add('far');
+        }
+      });
+    });
+  });
+};
+
+function openReviewModal(productId, productName) {
+  <c:if test="${empty sessionScope.user}">
+    alert("Please login first to rate food!");
+    window.location.href = "${pageContext.request.contextPath}/login";
+    return;
+  </c:if>
+  document.getElementById('reviewProductId').value = productId;
+  document.getElementById('reviewProductName').innerText = productName;
+  document.getElementById('reviewModal').style.display = 'flex';
+}
+
+function closeReviewModal() {
+  document.getElementById('reviewModal').style.display = 'none';
+  // reset stars
+  document.getElementById('reviewRatingInput').value = "0";
+  document.querySelectorAll('.rating-star').forEach(s => {
+    s.classList.remove('fas');
+    s.classList.add('far');
+  });
 }
 
 function toggleFav(el) {

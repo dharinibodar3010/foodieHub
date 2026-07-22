@@ -15,7 +15,8 @@
       </div>
       <div style="position:relative;">
         <i class="fas fa-search" style="position:absolute;left:12px;top:50%;transform:translateY(-50%);color:rgba(255,255,255,1.0);font-size:0.85rem;"></i>
-        <input type="text" id="searchOrder" placeholder="Search orders..." oninput="filterOrders()" style="background:rgba(255,255,255,1.0);border:1px solid rgba(255,255,255,1.0);border-radius:10px;padding:10px 16px 10px 36px;color:white;font-size:0.85rem;font-family:'Poppins',sans-serif;outline:none;width:250px;">
+        <input type="text" id="searchOrder" list="orderSuggestions" placeholder="Search by name or phone number..." oninput="filterOrders()" style="background:rgba(255,255,255,1.0);border:1px solid rgba(255,255,255,1.0);border-radius:10px;padding:10px 16px 10px 36px;color:black;font-size:0.85rem;font-family:'Poppins',sans-serif;outline:none;width:320px;">
+        <datalist id="orderSuggestions"></datalist>
       </div>
     </div>
 
@@ -38,7 +39,7 @@
               <tr class="order-row" style="border-bottom:1px solid rgba(255,255,255,0.04);transition:background 0.2s;" onmouseover="this.style.background='rgba(99,102,241,0.04)'" onmouseout="this.style.background='transparent'">
                 <td style="padding:14px 16px;font-weight:700;color:#818cf8;font-size:0.88rem;">#FH-${o.id}</td>
                 <td style="padding:14px 16px;">
-                  <div style="font-weight:600;font-size:0.88rem;color:white;">${o.user != null ? o.user.name : 'Guest'}</div>
+                  <div style="font-weight:600;font-size:0.88rem;color:white;" class="search-name">${o.user != null ? o.user.name : 'Guest'}</div>
                   <div style="font-size:0.75rem;color:rgba(255,255,255,1.0);">${o.user != null ? o.user.mobile : ''}</div>
                 </td>
                 <td style="padding:14px 16px;font-size:0.85rem;color:rgba(255,255,255,1.0);">${o.orderDate}</td>
@@ -84,6 +85,26 @@
 </div>
 
 <script>
+document.addEventListener("DOMContentLoaded", function() {
+  const suggestionsSet = new Set();
+  const rows = document.querySelectorAll('.order-row');
+  
+  rows.forEach(row => {
+    // Add customer names to suggestions
+    const nameEl = row.querySelector('.search-name');
+    if (nameEl && nameEl.textContent.trim() !== 'Guest') {
+      suggestionsSet.add(nameEl.textContent.trim());
+    }
+  });
+
+  const datalist = document.getElementById('orderSuggestions');
+  suggestionsSet.forEach(item => {
+    const option = document.createElement('option');
+    option.value = item;
+    datalist.appendChild(option);
+  });
+});
+
 function filterOrders() {
   const search = document.getElementById('searchOrder').value.toLowerCase();
   const rows = document.querySelectorAll('.order-row');
@@ -95,3 +116,4 @@ function filterOrders() {
 </script>
 
 <%@ include file="../common/footer.jsp"%>
+

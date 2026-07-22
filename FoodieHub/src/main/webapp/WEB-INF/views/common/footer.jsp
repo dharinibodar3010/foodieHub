@@ -1,5 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
+<%@ taglib prefix="c" uri="jakarta.tags.core"%>
 
+<c:if test="${empty hideNavbar}">
 <footer style="background: #0d0d14; border-top: 1px solid rgba(255,69,0,0.15); margin-top: 80px; padding-top: 60px; padding-bottom: 30px;">
   <div class="container">
     <div class="row g-5">
@@ -72,11 +74,32 @@
         <h6 style="color:white;font-weight:700;font-size:0.95rem;margin-bottom:20px;text-transform:uppercase;letter-spacing:1px;">Newsletter</h6>
         <p style="color:rgba(255,255,255,0.95);font-size:0.85rem;margin-bottom:16px;">Get exclusive offers and food news delivered to your inbox.</p>
         <div class="d-flex gap-2">
-          <input type="email" placeholder="Your email..." style="flex:1;background:rgba(255,255,255,0.05);border:1px solid rgba(255,69,0,0.2);border-radius:10px;padding:10px 14px;color:white;font-size:0.85rem;outline:none;">
-          <button style="background:linear-gradient(135deg,#ff4500,#ff8c00);border:none;border-radius:10px;padding:10px 16px;color:white;cursor:pointer;transition:all 0.3s;" onmouseover="this.style.transform='scale(1.05)'" onmouseout="this.style.transform='scale(1)'">
+          <input type="email" id="newsletterEmail" placeholder="Your email..." style="flex:1;background:rgba(255,255,255,0.05);border:1px solid rgba(255,69,0,0.2);border-radius:10px;padding:10px 14px;color:white;font-size:0.85rem;outline:none;">
+          <button onclick="subscribeNewsletter()" style="background:linear-gradient(135deg,#ff4500,#ff8c00);border:none;border-radius:10px;padding:10px 16px;color:white;cursor:pointer;transition:all 0.3s;" onmouseover="this.style.transform='scale(1.05)'" onmouseout="this.style.transform='scale(1)'">
             <i class="fas fa-paper-plane"></i>
           </button>
         </div>
+        <script>
+        function subscribeNewsletter() {
+            var email = document.getElementById("newsletterEmail").value;
+            if(!email) { alert("Please enter your email!"); return; }
+            fetch('${pageContext.request.contextPath}/subscribe-newsletter', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+                body: 'email=' + encodeURIComponent(email)
+            })
+            .then(res => res.text())
+            .then(data => {
+                if(data === 'success') {
+                    alert("Thank you for subscribing! Check your email.");
+                    document.getElementById("newsletterEmail").value = "";
+                } else {
+                    alert("Failed to subscribe. Please try again later.");
+                }
+            })
+            .catch(err => alert("An error occurred."));
+        }
+        </script>
         <div class="mt-4 d-flex gap-2 flex-wrap">
           <span style="background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.1);border-radius:6px;padding:4px 10px;font-size:0.75rem;color:rgba(255,255,255,0.9);">
             🚀 Fast Delivery
@@ -105,6 +128,7 @@
     </div>
   </div>
 </footer>
+</c:if>
 
 <!-- Bootstrap JS -->
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>

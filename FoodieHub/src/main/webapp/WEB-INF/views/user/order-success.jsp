@@ -224,7 +224,7 @@
           <div class="detail-label">Status</div>
           <div class="detail-value">
             <span style="background:rgba(40,167,69,0.15);border:1px solid rgba(40,167,69,0.4);border-radius:8px;padding:3px 12px;font-size:0.82rem;color:#28a745;">
-              ✅ Confirmed
+              ✅ <c:out value="${not empty orderStatus ? orderStatus : 'Confirmed'}" />
             </span>
           </div>
         </div>
@@ -244,23 +244,50 @@
         <div style="font-size:0.8rem;font-weight:700;text-transform:uppercase;letter-spacing:1px;color:rgba(255,255,255,0.35);margin-bottom:20px;">Live Order Tracking</div>
         <div class="tracking-steps">
           <div class="track-step">
-            <div class="track-circle done">✅</div>
+            <div class="track-circle" id="circle-placed">✅</div>
             <div class="track-label">Order Placed</div>
           </div>
           <div class="track-step">
-            <div class="track-circle done">👨‍🍳</div>
+            <div class="track-circle" id="circle-preparing">👨‍🍳</div>
             <div class="track-label">Preparing</div>
           </div>
           <div class="track-step">
-            <div class="track-circle active">🛵</div>
+            <div class="track-circle" id="circle-ontheway">🛵</div>
             <div class="track-label">On The Way</div>
           </div>
           <div class="track-step">
-            <div class="track-circle">🏠</div>
+            <div class="track-circle" id="circle-delivered">🏠</div>
             <div class="track-label">Delivered</div>
           </div>
         </div>
       </div>
+      
+      <script>
+        document.addEventListener('DOMContentLoaded', () => {
+          const status = "${not empty orderStatus ? orderStatus : 'Placed'}".toLowerCase();
+          
+          const placed = document.getElementById('circle-placed');
+          const prep = document.getElementById('circle-preparing');
+          const way = document.getElementById('circle-ontheway');
+          const deliv = document.getElementById('circle-delivered');
+          
+          if(status.includes('placed') || status.includes('confirmed')) {
+             placed.classList.add('done', 'active');
+          } else if (status.includes('preparing')) {
+             placed.classList.add('done');
+             prep.classList.add('done', 'active');
+          } else if (status.includes('way')) {
+             placed.classList.add('done');
+             prep.classList.add('done');
+             way.classList.add('done', 'active');
+          } else if (status.includes('delivered') || status.includes('completed')) {
+             placed.classList.add('done');
+             prep.classList.add('done');
+             way.classList.add('done');
+             deliv.classList.add('done', 'active');
+          }
+        });
+      </script>
 
       <!-- Success Message -->
       <c:if test="${not empty message}">

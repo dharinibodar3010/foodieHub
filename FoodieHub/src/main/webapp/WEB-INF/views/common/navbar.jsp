@@ -30,7 +30,7 @@
           <a class="nav-link-premium" href="${pageContext.request.contextPath}/cart">
             <span class="nav-cart-badge">
               <i class="fas fa-shopping-cart me-1"></i> Cart
-              <span class="cart-count">0</span>
+              <span class="cart-count" style="display:none;"></span>
             </span>
           </a>
         </li>
@@ -40,6 +40,7 @@
             <i class="fas fa-box me-1"></i> My Orders
           </a>
         </li>
+
 
         <c:choose>
           <c:when test="${not empty sessionScope.user}">
@@ -57,6 +58,7 @@
                 <i class="fas fa-chevron-down ms-1" style="font-size: 0.7rem;"></i>
               </a>
               <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="profileDropdown" style="background: rgba(18,18,26,0.95); backdrop-filter: blur(10px); border: 1px solid rgba(255,255,255,0.1); border-radius: 12px; padding: 10px; min-width: 180px;">
+
                 <li><a class="dropdown-item" href="${pageContext.request.contextPath}/profile" style="color: white; font-size: 0.85rem; padding: 8px 16px; border-radius: 8px; transition: all 0.3s;"><i class="fas fa-user-circle me-2" style="color: #ff4500;"></i> My Profile</a></li>
                 <li><hr class="dropdown-divider" style="border-color: rgba(255,255,255,0.1);"></li>
                 <li><a class="dropdown-item" href="${pageContext.request.contextPath}/logout" style="color: white; font-size: 0.85rem; padding: 8px 16px; border-radius: 8px; transition: all 0.3s;"><i class="fas fa-sign-out-alt me-2" style="color: #dc3545;"></i> Logout</a></li>

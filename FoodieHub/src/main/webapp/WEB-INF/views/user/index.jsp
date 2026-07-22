@@ -97,7 +97,7 @@
   .hero-food-img {
     width: 100%;
     height: 380px;
-    object-fit: contain;
+    object-fit: cover;
     background: rgba(0,0,0,0.3);
     border-radius: 18px;
     transition: transform 0.5s ease;
@@ -114,10 +114,11 @@
     align-items: center;
     gap: 10px;
     animation: float 3s ease-in-out infinite;
+    z-index: 10;
   }
 
-  .hero-floating-badge.badge-1 { top: 30px; left: -20px; }
-  .hero-floating-badge.badge-2 { bottom: 60px; right: -20px; animation-delay: 1.5s; }
+  .hero-floating-badge.badge-1 { top: 30px; left: -10px; }
+  .hero-floating-badge.badge-2 { bottom: 60px; right: -10px; animation-delay: 1.5s; }
 
   /* ===== FEATURES SECTION ===== */
   .features-section { padding: 40px 0; }
@@ -260,7 +261,22 @@
 
       <div class="col-lg-6 d-none d-lg-block animate__animated animate__fadeInRight">
         <div class="hero-food-card" style="position:relative;">
-          <img src="https://images.unsplash.com/photo-1565299624946-b28f40a0ae38?w=600&q=80" alt="Delicious Food" class="hero-food-img">
+          
+          <!-- Bootstrap Carousel Slider -->
+          <div id="heroCarousel" class="carousel slide carousel-fade" data-bs-ride="carousel" data-bs-interval="2500" style="border-radius: 18px; overflow: hidden;">
+            <div class="carousel-inner">
+              <div class="carousel-item active">
+                <img src="https://images.unsplash.com/photo-1565299624946-b28f40a0ae38?w=600&q=80" alt="Delicious Food 1" class="hero-food-img d-block w-100">
+              </div>
+              <div class="carousel-item">
+                <img src="https://images.unsplash.com/photo-1504674900247-0877df9cc836?w=600&q=80" alt="Delicious Food 2" class="hero-food-img d-block w-100">
+              </div>
+              <div class="carousel-item">
+                <img src="https://images.unsplash.com/photo-1546069901-ba9599a7e63c?w=600&q=80" alt="Delicious Food 3" class="hero-food-img d-block w-100">
+              </div>
+            </div>
+          </div>
+          <!-- End Slider -->
 
           <div class="hero-floating-badge badge-1">
             <div style="width:36px;height:36px;background:linear-gradient(135deg,#ff4500,#ff8c00);border-radius:10px;display:flex;align-items:center;justify-content:center;">

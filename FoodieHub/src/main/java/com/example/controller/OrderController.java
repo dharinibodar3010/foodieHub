@@ -28,7 +28,7 @@ public class OrderController {
 	private OrderService orderService;
 
 	@GetMapping("/checkout")
-	public String checkout(HttpSession session, Model model) {
+	public String checkout(@RequestParam(required = false) String coupon, HttpSession session, Model model) {
 		User user = (User) session.getAttribute("user");
 		if (user == null) return "redirect:/login";
 
@@ -40,12 +40,17 @@ public class OrderController {
 			totalAmount += cart.getProduct().getPrice() * cart.getQuantity();
 		}
 		
-		double tax = totalAmount * 0.05;
+		double tax = Math.round(totalAmount * 0.05);
+		double discount = 0;
+		if ("FOODIE50".equalsIgnoreCase(coupon)) {
+			discount = Math.round(totalAmount * 0.5);
+		}
 		
 		model.addAttribute("cartItems", cartItems);
 		model.addAttribute("subtotal", totalAmount);
 		model.addAttribute("tax", tax);
-		model.addAttribute("totalAmount", totalAmount + tax);
+		model.addAttribute("discount", discount);
+		model.addAttribute("totalAmount", totalAmount + tax - discount);
 		
 		return "user/checkout";
 	}
@@ -88,6 +93,7 @@ public class OrderController {
 		model.addAttribute("amount", totalAmount);
 		model.addAttribute("message", "Payment Successful");
 		model.addAttribute("orderId", order.getId());
+		model.addAttribute("orderStatus", order.getStatus());
 
 		return "user/order-success";
 	}

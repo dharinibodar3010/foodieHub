@@ -391,6 +391,12 @@
             <div style="display:flex;justify-content:space-between;font-size:0.88rem;color:rgba(255,255,255,1.0);">
               <span>GST (5%)</span><span style="color:white;font-weight:600;">₹${tax}</span>
             </div>
+            <c:if test="${not empty discount and discount > 0}">
+            <div style="display:flex;justify-content:space-between;font-size:0.88rem;color:rgba(255,255,255,1.0);">
+              <span style="color:#28a745;font-weight:600;"><i class="fas fa-tag me-1"></i>Discount</span>
+              <span style="color:#28a745;font-weight:700;">-₹${discount}</span>
+            </div>
+            </c:if>
           </div>
 
           <div style="height:1px;background:linear-gradient(to right,transparent,rgba(255,69,0,0.4),transparent);margin-bottom:16px;"></div>
