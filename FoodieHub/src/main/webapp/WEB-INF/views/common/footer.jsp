@@ -130,6 +130,50 @@
 </footer>
 </c:if>
 
+<script>
+function addToCartAjax(btn, productId) {
+  const originalHtml = btn.innerHTML;
+  btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i>';
+  btn.disabled = true;
+  
+  const formData = new URLSearchParams();
+  formData.append('productId', productId);
+  formData.append('quantity', 1);
+
+  fetch('${pageContext.request.contextPath}/api/cart/add', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+    body: formData.toString()
+  })
+  .then(res => res.text())
+  .then(count => {
+    if(count === 'unauthorized') {
+      window.location.href = '${pageContext.request.contextPath}/login';
+    } else {
+      // Update badge
+      const badges = document.querySelectorAll('.cart-count');
+      badges.forEach(b => {
+        b.textContent = count;
+        b.style.display = 'inline-flex';
+      });
+      // Show success
+      btn.innerHTML = '<i class="fas fa-check"></i> Added';
+      btn.style.background = '#28a745';
+      setTimeout(() => {
+        btn.innerHTML = originalHtml;
+        btn.style.background = '';
+        btn.disabled = false;
+      }, 1500);
+    }
+  })
+  .catch(err => {
+    console.error(err);
+    btn.innerHTML = originalHtml;
+    btn.disabled = false;
+  });
+}
+</script>
+
 <!-- Bootstrap JS -->
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 

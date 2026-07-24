@@ -37,23 +37,65 @@ public class ProductController {
 		return "admin/add-product";
 	}
 
-	public static String UPLOAD_DIR = System.getProperty("user.dir") + "/src/main/webapp/images";
+	@org.springframework.beans.factory.annotation.Value("${foodiehub.upload.dir}")
+	private String UPLOAD_DIR;
 
 	@PostMapping("/saveProduct")
-	public String saveProduct(@ModelAttribute Product product, @RequestParam(value="imageFile", required=false) org.springframework.web.multipart.MultipartFile file) {
+	@org.springframework.web.bind.annotation.ResponseBody
+	public org.springframework.http.ResponseEntity<String> saveProduct(
+			@RequestParam String name,
+			@RequestParam double price,
+			@RequestParam String description,
+			@RequestParam(required=false) String image,
+			@RequestParam(required=false) Long categoryId,
+			@RequestParam(defaultValue="true") boolean available,
+			@RequestParam(value="imageFile", required=false) org.springframework.web.multipart.MultipartFile file) {
 		try {
-			if (file != null && !file.isEmpty()) {
-				java.io.File dir = new java.io.File(UPLOAD_DIR);
-				if (!dir.exists()) dir.mkdirs();
-				String filename = java.util.UUID.randomUUID().toString() + "_" + file.getOriginalFilename();
-				file.transferTo(new java.io.File(dir, filename));
-				product.setImage(filename);
+			Product product = new Product();
+			product.setName(name);
+			product.setPrice(price);
+			product.setDescription(description);
+			product.setAvailable(available);
+
+			// Fetch Category from DB
+			if (categoryId != null) {
+				categoryRepository.findById(categoryId).ifPresent(product::setCategory);
 			}
+
+			// Handle image file upload — try, but don't fail product save if upload fails
+			String savedImage = null;
+			if (file != null && !file.isEmpty()) {
+				try {
+					// Use absolute path relative to working dir or project
+					java.io.File uploadDir = new java.io.File(UPLOAD_DIR);
+					if (!uploadDir.isAbsolute()) {
+						// Resolve relative to current working directory
+						uploadDir = uploadDir.getAbsoluteFile();
+					}
+					if (!uploadDir.exists()) uploadDir.mkdirs();
+					String filename = java.util.UUID.randomUUID().toString() + "_" + file.getOriginalFilename();
+					java.io.File dest = new java.io.File(uploadDir, filename);
+					file.transferTo(dest);
+					savedImage = filename;
+					System.out.println("Image saved to: " + dest.getAbsolutePath());
+				} catch (Exception imgEx) {
+					System.err.println("Image upload failed (product will still be saved): " + imgEx.getMessage());
+				}
+			}
+
+			// Set image: uploaded file > URL/filename text > null
+			if (savedImage != null) {
+				product.setImage(savedImage);
+			} else if (image != null && !image.trim().isEmpty()) {
+				product.setImage(image.trim());
+			}
+
 			productService.saveProduct(product);
+			return org.springframework.http.ResponseEntity.ok("success");
 		} catch (Exception e) {
 			e.printStackTrace();
+			return org.springframework.http.ResponseEntity.status(500).body("error: " + e.getMessage());
 		}
-		return "redirect:/viewProducts";
 	}
 
 	@GetMapping("/editProduct/{id}")
@@ -65,20 +107,40 @@ public class ProductController {
 	}
 
 	@PostMapping("/updateProduct")
-	public String updateProduct(@ModelAttribute Product product, @RequestParam(value="imageFile", required=false) org.springframework.web.multipart.MultipartFile file) {
+	public String updateProduct(
+			@RequestParam Long id,
+			@RequestParam String name,
+			@RequestParam double price,
+			@RequestParam String description,
+			@RequestParam(required=false) String image,
+			@RequestParam(required=false) Long categoryId,
+			@RequestParam(defaultValue="true") boolean available,
+			@RequestParam(value="imageFile", required=false) org.springframework.web.multipart.MultipartFile file) {
 		try {
+			Product product = productService.getProductById(id);
+			if (product == null) return "redirect:/viewProducts";
+
+			product.setName(name);
+			product.setPrice(price);
+			product.setDescription(description);
+			product.setAvailable(available);
+
+			// Fetch Category from DB
+			if (categoryId != null) {
+				categoryRepository.findById(categoryId).ifPresent(product::setCategory);
+			}
+
+			// Handle image
 			if (file != null && !file.isEmpty()) {
 				java.io.File dir = new java.io.File(UPLOAD_DIR);
 				if (!dir.exists()) dir.mkdirs();
 				String filename = java.util.UUID.randomUUID().toString() + "_" + file.getOriginalFilename();
 				file.transferTo(new java.io.File(dir, filename));
 				product.setImage(filename);
-			} else {
-				if (product.getImage() == null || product.getImage().trim().isEmpty()) {
-					Product old = productService.getProductById(product.getId());
-					if (old != null) product.setImage(old.getImage());
-				}
+			} else if (image != null && !image.trim().isEmpty()) {
+				product.setImage(image.trim());
 			}
+
 			productService.updateProduct(product);
 		} catch (Exception e) {
 			e.printStackTrace();

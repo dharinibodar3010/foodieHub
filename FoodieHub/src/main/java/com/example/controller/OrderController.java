@@ -4,6 +4,7 @@ import java.util.Date;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -26,6 +27,12 @@ public class OrderController {
 
 	@Autowired
 	private OrderService orderService;
+
+	@Autowired
+	private com.example.service.UserService userService;
+
+	@Value("${razorpay.api.key}")
+	private String razorpayApiKey;
 
 	@GetMapping("/checkout")
 	public String checkout(@RequestParam(required = false) String coupon, HttpSession session, Model model) {
@@ -51,6 +58,7 @@ public class OrderController {
 		model.addAttribute("tax", tax);
 		model.addAttribute("discount", discount);
 		model.addAttribute("totalAmount", totalAmount + tax - discount);
+		model.addAttribute("razorpayKey", razorpayApiKey);
 		
 		return "user/checkout";
 	}
@@ -58,10 +66,22 @@ public class OrderController {
 	@Autowired
 	private com.example.repository.OrderItemRepository orderItemRepository;
 
-	@PostMapping("/payment")
-	public String payment(@RequestParam String paymentMode, @RequestParam double totalAmount, HttpSession session, Model model) {
+	@PostMapping("/place-order")
+	public String placeOrder(@RequestParam double totalAmount, @RequestParam String address, @RequestParam String deliveryTime, HttpSession session, Model model) {
 		User user = (User) session.getAttribute("user");
 		if (user == null) return "redirect:/login";
+
+		// Update user address if they changed it during checkout
+		if (address != null && !address.trim().isEmpty() && !address.equals(user.getAddress())) {
+			user.setAddress(address);
+			// Fetch the user from DB to update
+			com.example.entity.User existingUser = userService.login(user.getEmail(), user.getPassword());
+			if (existingUser != null) {
+				existingUser.setAddress(address);
+				userService.saveUser(existingUser);
+				session.setAttribute("user", existingUser);
+			}
+		}
 
 		List<Cart> cartItems = cartService.getUserCart(user.getId());
 		if (cartItems.isEmpty()) return "redirect:/cart";
@@ -69,9 +89,9 @@ public class OrderController {
 		Order order = new Order();
 		order.setUser(user);
 		order.setOrderDate(new Date());
-		order.setPaymentMode(paymentMode);
 		order.setTotalAmount(totalAmount);
-		order.setStatus("Placed");
+		order.setStatus("Pending Payment");
+		order.setDeliveryTime(deliveryTime);
 		orderService.saveOrder(order);
 		
 		// Save order items
@@ -84,18 +104,10 @@ public class OrderController {
 			orderItemRepository.save(orderItem);
 		}
 
-		// Clear cart after placing order
-		for (Cart cart : cartItems) {
-			cartService.deleteCart(cart.getId());
-		}
+		// ✅ Do NOT clear cart here — clear only after successful payment
+		// Cart will be cleared in PaymentController after payment confirmed
 
-		model.addAttribute("paymentMode", paymentMode);
-		model.addAttribute("amount", totalAmount);
-		model.addAttribute("message", "Payment Successful");
-		model.addAttribute("orderId", order.getId());
-		model.addAttribute("orderStatus", order.getStatus());
-
-		return "user/order-success";
+		return "redirect:/payment?orderId=" + order.getId();
 	}
 
 	@GetMapping("/orders")

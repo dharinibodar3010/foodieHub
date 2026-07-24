@@ -6,15 +6,25 @@
 <style>
   .profile-page { padding: 60px 0 100px; }
   .profile-header {
-    background: linear-gradient(135deg, rgba(255,69,0,0.1), transparent);
-    border: 1px solid rgba(255,69,0,0.2);
+    background: rgba(18,18,26,0.7);
+    border: 1px solid rgba(255,255,255,0.06);
     border-radius: 24px;
     padding: 40px;
     display: flex;
     align-items: center;
     gap: 30px;
     margin-bottom: 30px;
+    backdrop-filter: blur(25px);
+    -webkit-backdrop-filter: blur(25px);
+    box-shadow: 0 15px 35px rgba(0,0,0,0.4);
+    position: relative;
+    overflow: hidden;
   }
+  .profile-header::before {
+    content: ''; position: absolute; top: -50px; right: -50px; width: 200px; height: 200px;
+    background: rgba(255,69,0,0.15); border-radius: 50%; filter: blur(40px); pointer-events: none; z-index: 0;
+  }
+  .profile-header > * { position: relative; z-index: 2; }
   .profile-img-wrap {
     width: 120px;
     height: 120px;
@@ -33,11 +43,21 @@
   .profile-info p { color: rgba(255,255,255,0.6); margin-bottom: 0; }
   
   .profile-card {
-    background: rgba(255,255,255,0.03);
-    border: 1px solid rgba(255,255,255,0.08);
+    background: rgba(18,18,26,0.7);
+    border: 1px solid rgba(255,255,255,0.06);
     border-radius: 24px;
     padding: 30px;
+    backdrop-filter: blur(25px);
+    -webkit-backdrop-filter: blur(25px);
+    box-shadow: 0 15px 35px rgba(0,0,0,0.4);
+    position: relative;
+    overflow: hidden;
   }
+  .profile-card::before {
+    content: ''; position: absolute; bottom: -50px; left: -50px; width: 200px; height: 200px;
+    background: rgba(99,102,241,0.08); border-radius: 50%; filter: blur(40px); pointer-events: none; z-index: 0;
+  }
+  .profile-card > * { position: relative; z-index: 2; }
   .profile-card-title {
     font-size: 1.2rem;
     font-weight: 700;
@@ -55,13 +75,27 @@
     <div class="col-lg-8">
     
       <c:if test="${not empty msg}">
-        <div class="alert alert-success" style="background:rgba(40,167,69,0.1);border:1px solid rgba(40,167,69,0.3);color:#28a745;border-radius:12px;">
-          <i class="fas fa-check-circle me-2"></i> ${msg}
+        <div id="profileMsg" style="display:flex;align-items:center;gap:12px;background:rgba(40,167,69,0.12);border:1px solid rgba(40,167,69,0.35);color:#28a745;border-radius:14px;padding:14px 20px;margin-bottom:24px;font-weight:600;transition:opacity 0.5s ease;">
+          <i class="fas fa-check-circle" style="font-size:1.2rem;"></i>
+          <span>${msg}</span>
+          <button onclick="document.getElementById('profileMsg').style.display='none'" style="margin-left:auto;background:none;border:none;color:#28a745;cursor:pointer;font-size:1.1rem;">
+            <i class="fas fa-times"></i>
+          </button>
         </div>
+        <script>
+          // Auto dismiss after 3 seconds
+          setTimeout(function() {
+            var msg = document.getElementById('profileMsg');
+            if (msg) {
+              msg.style.opacity = '0';
+              setTimeout(function() { msg.style.display = 'none'; }, 500);
+            }
+          }, 3000);
+        </script>
       </c:if>
 
       <div class="profile-header">
-        <div class="profile-img-wrap" style="cursor:pointer;" onclick="document.getElementById('profileImageInput').click();">
+        <div class="profile-img-wrap" style="position:relative;">
           <c:choose>
             <c:when test="${not empty user.profileImage}">
               <img id="profilePreview" src="${pageContext.request.contextPath}/images/${user.profileImage}" class="profile-img" alt="Profile">
@@ -70,14 +104,41 @@
               <img id="profilePreview" src="https://ui-avatars.com/api/?name=${user.name}&background=ff4500&color=fff&size=200" class="profile-img" alt="Profile">
             </c:otherwise>
           </c:choose>
-          <div style="position:absolute;bottom:-10px;right:-10px;background:#ff4500;width:36px;height:36px;border-radius:50%;display:flex;align-items:center;justify-content:center;color:white;border:3px solid #12121a;transition:all 0.3s;">
-            <i class="fas fa-camera"></i>
+
+          <!-- Hover Overlay -->
+          <div id="photoOverlay" style="position:absolute;inset:0;border-radius:50%;background:rgba(0,0,0,0.55);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:6px;opacity:0;transition:opacity 0.25s;cursor:pointer;"
+               onmouseover="this.style.opacity='1'" onmouseout="this.style.opacity='0'">
+            <div onclick="document.getElementById('profileImageInput').click()" style="color:white;font-size:0.72rem;font-weight:700;display:flex;flex-direction:column;align-items:center;gap:3px;">
+              <i class="fas fa-camera" style="font-size:1.1rem;"></i> Change
+            </div>
+            <c:if test="${not empty user.profileImage}">
+              <div onclick="deleteProfilePhoto()" style="color:#ff4500;font-size:0.72rem;font-weight:700;display:flex;flex-direction:column;align-items:center;gap:3px;">
+                <i class="fas fa-trash" style="font-size:0.9rem;"></i> Delete
+              </div>
+            </c:if>
+          </div>
+
+          <!-- Camera Icon Badge -->
+          <div onclick="document.getElementById('profileImageInput').click()" style="position:absolute;bottom:-8px;right:-8px;background:#ff4500;width:32px;height:32px;border-radius:50%;display:flex;align-items:center;justify-content:center;color:white;border:3px solid #12121a;cursor:pointer;transition:all 0.3s;z-index:2;" title="Change Photo">
+            <i class="fas fa-camera" style="font-size:0.75rem;"></i>
           </div>
         </div>
+
         <div class="profile-info">
           <h2>${user.name}</h2>
           <p><i class="fas fa-envelope me-2"></i>${user.email}</p>
           <p><i class="fas fa-phone me-2"></i>${user.mobile != null ? user.mobile : 'Not added'}</p>
+          <!-- Quick change photo buttons -->
+          <div style="display:flex;gap:8px;margin-top:10px;flex-wrap:wrap;">
+            <button type="button" onclick="document.getElementById('profileImageInput').click()" style="background:rgba(255,69,0,0.15);border:1px solid rgba(255,69,0,0.3);border-radius:8px;padding:6px 14px;color:#ff4500;font-size:0.8rem;font-weight:600;cursor:pointer;transition:all 0.3s;" onmouseover="this.style.background='rgba(255,69,0,0.25)'" onmouseout="this.style.background='rgba(255,69,0,0.15)'">
+              <i class="fas fa-camera me-1"></i> Change Photo
+            </button>
+            <c:if test="${not empty user.profileImage}">
+              <button type="button" onclick="deleteProfilePhoto()" style="background:rgba(220,53,69,0.12);border:1px solid rgba(220,53,69,0.3);border-radius:8px;padding:6px 14px;color:#dc3545;font-size:0.8rem;font-weight:600;cursor:pointer;transition:all 0.3s;" onmouseover="this.style.background='rgba(220,53,69,0.25)'" onmouseout="this.style.background='rgba(220,53,69,0.12)'">
+                <i class="fas fa-trash me-1"></i> Delete Photo
+              </button>
+            </c:if>
+          </div>
         </div>
       </div>
 
@@ -195,20 +256,49 @@ function cropAndSave() {
       width: 400,
       height: 400
     }).toBlob(function(blob) {
-      // Create a file from blob
       const file = new File([blob], "profile_cropped.jpg", { type: "image/jpeg", lastModified: new Date().getTime() });
-      
-      // Assign the cropped file to the hidden input using DataTransfer
       const dataTransfer = new DataTransfer();
       dataTransfer.items.add(file);
       document.getElementById('croppedImageInput').files = dataTransfer.files;
-      
-      // Update preview
       document.getElementById('profilePreview').src = URL.createObjectURL(blob);
-      
       bootstrap.Modal.getInstance(document.getElementById('cropperModal')).hide();
     }, 'image/jpeg');
   }
+}
+
+function deleteProfilePhoto() {
+  if (!confirm('Are you sure you want to delete your profile photo?')) return;
+  
+  fetch('${pageContext.request.contextPath}/deleteProfilePhoto', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/x-www-form-urlencoded' }
+  })
+  .then(res => res.text())
+  .then(result => {
+    if (result === 'success') {
+      // Reset to avatar
+      const name = '${user.name}';
+      document.getElementById('profilePreview').src = 
+        'https://ui-avatars.com/api/?name=' + encodeURIComponent(name) + '&background=ff4500&color=fff&size=200';
+      // Show success msg
+      const container = document.querySelector('.col-lg-8');
+      const existing = document.getElementById('profileMsg');
+      if (existing) existing.remove();
+      const msg = document.createElement('div');
+      msg.id = 'profileMsg';
+      msg.style.cssText = 'display:flex;align-items:center;gap:12px;background:rgba(40,167,69,0.12);border:1px solid rgba(40,167,69,0.35);color:#28a745;border-radius:14px;padding:14px 20px;margin-bottom:24px;font-weight:600;transition:opacity 0.5s ease;';
+      msg.innerHTML = '<i class="fas fa-check-circle" style="font-size:1.2rem;"></i><span>Profile photo deleted!</span>';
+      container.insertBefore(msg, container.firstChild);
+      // Hide delete button
+      document.querySelectorAll('[onclick="deleteProfilePhoto()"]').forEach(b => b.style.display='none');
+      // Auto dismiss
+      setTimeout(() => {
+        msg.style.opacity = '0';
+        setTimeout(() => msg.remove(), 500);
+      }, 3000);
+    }
+  })
+  .catch(err => alert('Error deleting photo'));
 }
 </script>
 

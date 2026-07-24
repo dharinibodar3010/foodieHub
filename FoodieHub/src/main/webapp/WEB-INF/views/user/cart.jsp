@@ -35,7 +35,9 @@
             </div>
           </c:if>
           <c:forEach var="c" items="${cartItems}">
-          <div class="cart-item-row" data-id="${c.id}" data-price="${c.product.price}" data-qty="${c.quantity}" style="background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.07);border-radius:18px;padding:20px;display:flex;align-items:center;gap:16px;transition:all 0.3s;">
+          <div class="cart-item-row" data-id="${c.id}" data-price="${c.product.price}" data-qty="${c.quantity}" style="background:rgba(18,18,26,0.7);backdrop-filter:blur(25px);-webkit-backdrop-filter:blur(25px);box-shadow:0 15px 35px rgba(0,0,0,0.4);border:1px solid rgba(255,255,255,0.06);border-radius:24px;padding:20px;display:flex;align-items:center;gap:16px;transition:all 0.3s;position:relative;overflow:hidden;">
+            <div style="position:absolute;top:-30px;left:-30px;width:100px;height:100px;background:rgba(255,94,0,0.1);border-radius:50%;filter:blur(30px);pointer-events:none;z-index:0;"></div>
+            <div style="display:flex;width:100%;align-items:center;gap:16px;position:relative;z-index:2;">
             <img src="${c.product.image.startsWith('http') ? c.product.image : pageContext.request.contextPath.concat('/images/').concat(c.product.image)}" alt="${c.product.name}"
                  style="width:80px;height:80px;border-radius:14px;object-fit:cover;flex-shrink:0;">
             <div style="flex:1;">
@@ -54,12 +56,15 @@
             <a href="${pageContext.request.contextPath}/removeCart/${c.id}" style="width:36px;height:36px;border-radius:10px;border:1px solid rgba(220,53,69,0.3);background:rgba(220,53,69,0.1);color:#dc3545;cursor:pointer;font-size:0.85rem;display:flex;align-items:center;justify-content:center;text-decoration:none;transition:all 0.3s;flex-shrink:0;" onmouseover="this.style.background='rgba(220,53,69,0.25)'" onmouseout="this.style.background='rgba(220,53,69,0.1)'">
               <i class="fas fa-trash"></i>
             </a>
+            </div>
           </div>
           </c:forEach>
         </div>
 
         <!-- Coupon -->
-        <div style="background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.07);border-radius:18px;padding:20px;margin-top:20px;">
+        <div style="background:rgba(18,18,26,0.7);backdrop-filter:blur(25px);-webkit-backdrop-filter:blur(25px);box-shadow:0 15px 35px rgba(0,0,0,0.4);border:1px solid rgba(255,255,255,0.06);border-radius:24px;padding:20px;margin-top:20px;position:relative;overflow:hidden;">
+          <div style="position:absolute;bottom:-40px;right:-40px;width:150px;height:150px;background:rgba(99,102,241,0.08);border-radius:50%;filter:blur(40px);pointer-events:none;z-index:0;"></div>
+          <div style="position:relative;z-index:2;">
           <div style="display:flex;gap:12px;margin-bottom:15px;">
             <div style="position:relative;flex:1;">
               <i class="fas fa-tag" style="position:absolute;left:14px;top:50%;transform:translateY(-50%);color:rgba(255,255,255,0.35);font-size:0.9rem;"></i>
@@ -80,13 +85,16 @@
               <div style="font-size:0.8rem;color:rgba(255,255,255,0.7);">Get 50% discount on your order. Click to apply.</div>
             </div>
           </div>
+          </div>
         </div>
 
       </div>
 
       <!-- Order Summary -->
       <div class="col-lg-4">
-        <div style="background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.07);border-radius:20px;padding:28px;position:sticky;top:90px;">
+        <div style="background:rgba(18,18,26,0.7);backdrop-filter:blur(25px);-webkit-backdrop-filter:blur(25px);box-shadow:0 15px 35px rgba(0,0,0,0.4);border:1px solid rgba(255,255,255,0.06);border-radius:24px;padding:28px;position:sticky;top:90px;overflow:hidden;">
+          <div style="position:absolute;top:-50px;right:-50px;width:150px;height:150px;background:rgba(255,94,0,0.15);border-radius:50%;filter:blur(40px);pointer-events:none;z-index:0;"></div>
+          <div style="position:relative;z-index:2;">
 
           <h5 style="font-weight:800;font-size:1.1rem;margin-bottom:24px;padding-bottom:16px;border-bottom:1px solid rgba(255,255,255,0.07);">
             Order Summary
@@ -140,6 +148,7 @@
               <div style="font-size:1.2rem;margin-bottom:4px;">🔄</div>
               <div style="font-size:0.68rem;color:rgba(255,255,255,0.35);">Easy Returns</div>
             </div>
+          </div>
           </div>
         </div>
       </div>

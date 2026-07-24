@@ -8,12 +8,16 @@
   <div style="width:260px;flex-shrink:0;"><%@ include file="../common/sidebar.jsp"%></div>
   <div style="flex:1;padding:32px;min-height:calc(100vh - 70px);">
 
-    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:32px;flex-wrap:wrap;gap:16px;">
-      <h2 style="font-weight:800;font-size:1.5rem;margin:0;">Edit <span class="text-gradient">Product</span></h2>
-      <a href="${pageContext.request.contextPath}/products" class="btn-outline-premium"><i class="fas fa-arrow-left"></i> Back</a>
+    <div style="position:sticky; top:0; z-index:98; background:rgba(13,13,20,0.85); backdrop-filter:blur(25px); -webkit-backdrop-filter:blur(25px); padding:24px 32px 16px 32px; margin:-32px -32px 24px -32px; border-bottom:1px solid rgba(255,255,255,0.04); box-shadow: 0 10px 40px rgba(0,0,0,0.3);">
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:16px;flex-wrap:wrap;gap:16px;">
+        <h2 style="font-weight:800;font-size:1.5rem;margin:0;">Edit <span class="text-gradient">Product</span></h2>
+        <a href="${pageContext.request.contextPath}/products" class="btn-outline-premium"><i class="fas fa-arrow-left"></i> Back</a>
+      </div>
     </div>
 
-    <div style="background:rgba(255,255,255,0.02);border:1px solid rgba(255,255,255,0.06);border-radius:24px;padding:36px;max-width:780px;">
+    <div style="background:rgba(18,18,26,0.7);border:1px solid rgba(255,255,255,0.06);border-radius:24px;padding:36px;backdrop-filter:blur(25px);-webkit-backdrop-filter:blur(25px);box-shadow:0 15px 35px rgba(0,0,0,0.4);position:relative;overflow:hidden;max-width:780px;">
+      <div style="position:absolute;top:-50px;right:-50px;width:200px;height:200px;background:rgba(255,69,0,0.08);border-radius:50%;filter:blur(40px);pointer-events:none;"></div>
+      <div style="position:relative;z-index:2;">
       <form action="${pageContext.request.contextPath}/updateProduct" method="post" enctype="multipart/form-data">
         <input type="hidden" name="id" value="${product.id}">
 
@@ -31,7 +35,7 @@
           </div>
           <div class="col-md-6">
             <label class="form-label-premium">Category</label>
-            <select name="category.id" class="form-premium w-100">
+            <select name="categoryId" class="form-premium w-100">
               <option value="">-- Select Category --</option>
               <c:if test="${not empty categories}">
                 <c:forEach var="cat" items="${categories}">
@@ -75,6 +79,7 @@
           </div>
         </div>
       </form>
+      </div>
     </div>
   </div>
 </div>

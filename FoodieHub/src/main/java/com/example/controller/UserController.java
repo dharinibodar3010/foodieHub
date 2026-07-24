@@ -20,6 +20,9 @@ public class UserController {
 	@Autowired
 	private com.example.repository.CategoryRepository categoryRepository;
 
+	@org.springframework.beans.factory.annotation.Value("${foodiehub.upload.dir}")
+	private String uploadDir;
+
 	@GetMapping("/")
 	public String home(Model model) {
 		java.util.List<com.example.entity.Product> allProducts = productService.getAllProducts();
@@ -132,7 +135,9 @@ public class UserController {
 			if (!imageFile.isEmpty()) {
 				try {
 					String fileName = imageFile.getOriginalFilename();
-					java.nio.file.Path imagePath = java.nio.file.Paths.get("src/main/webapp/images/" + fileName);
+					java.io.File dir = new java.io.File(uploadDir);
+					if (!dir.exists()) dir.mkdirs();
+					java.nio.file.Path imagePath = java.nio.file.Paths.get(uploadDir + "/" + fileName);
 					java.nio.file.Files.write(imagePath, imageFile.getBytes());
 					existingUser.setProfileImage(fileName);
 				} catch (Exception e) {
@@ -152,5 +157,29 @@ public class UserController {
 	public String logout(jakarta.servlet.http.HttpSession session) {
 		session.invalidate();
 		return "redirect:/login";
+	}
+
+	@PostMapping("/deleteProfilePhoto")
+	@ResponseBody
+	public String deleteProfilePhoto(jakarta.servlet.http.HttpSession session) {
+		User sessionUser = (User) session.getAttribute("user");
+		if (sessionUser == null) return "error";
+		try {
+			User existingUser = userService.getUserById(sessionUser.getId());
+			if (existingUser != null) {
+				// Optionally delete the file
+				if (existingUser.getProfileImage() != null) {
+					java.io.File imgFile = new java.io.File(uploadDir + "/" + existingUser.getProfileImage());
+					if (imgFile.exists()) imgFile.delete();
+				}
+				existingUser.setProfileImage(null);
+				userService.saveUser(existingUser);
+				session.setAttribute("user", existingUser);
+			}
+			return "success";
+		} catch (Exception e) {
+			e.printStackTrace();
+			return "error";
+		}
 	}
 }

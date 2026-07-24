@@ -48,18 +48,19 @@
   }
 
   .success-card {
-    background: rgba(255,255,255,0.03);
-    border: 1px solid rgba(40,167,69,0.2);
-    border-radius: 28px;
+    background: rgba(18,18,26,0.7);
+    border: 1px solid rgba(255,255,255,0.06);
+    border-radius: 24px;
     padding: 50px 40px;
-    text-align: center;
-    max-width: 580px;
+    max-width: 500px;
     margin: 0 auto;
+    text-align: center;
+    backdrop-filter: blur(25px);
+    -webkit-backdrop-filter: blur(25px);
+    box-shadow: 0 15px 35px rgba(0,0,0,0.4);
     position: relative;
-    z-index: 1;
-    box-shadow: 0 30px 80px rgba(0,0,0,0.4);
+    overflow: hidden;
   }
-
   .success-card::before {
     content: '';
     position: absolute;
@@ -67,7 +68,9 @@
     height: 2px;
     background: linear-gradient(to right, transparent, #28a745, #20c997, transparent);
     border-radius: 2px;
+    z-index: 3;
   }
+  .success-card > * { position: relative; z-index: 2; }
 
   .order-detail-grid {
     display: grid;
@@ -184,6 +187,7 @@
   <div class="container" style="position:relative;z-index:1;">
 
     <div class="success-card animate__animated animate__fadeInUp">
+      <div style="position:absolute;top:-50px;right:-50px;width:200px;height:200px;background:rgba(40,167,69,0.15);border-radius:50%;filter:blur(40px);pointer-events:none;z-index:0;"></div>
 
       <div class="success-icon">✅</div>
 

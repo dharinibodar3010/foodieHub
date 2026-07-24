@@ -7,6 +7,8 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.ManyToOne;
+import jakarta.persistence.OneToOne;
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Table;
 
 @Entity
@@ -19,9 +21,9 @@ public class Order {
 
 	private double totalAmount;
 
-	private String paymentMode;
-
 	private String status;
+
+	private String deliveryTime;
 
 	private Date orderDate;
 
@@ -30,16 +32,18 @@ public class Order {
 
 	@jakarta.persistence.OneToMany(mappedBy = "order", cascade = jakarta.persistence.CascadeType.ALL, fetch = jakarta.persistence.FetchType.EAGER)
 	private java.util.List<OrderItem> items;
+	
+	@OneToOne(mappedBy = "order", cascade = CascadeType.ALL)
+	private Payment payment;
 
 	public Order() {
 
 	}
 
-	public Order(Long id, double totalAmount, String paymentMode, String status, Date orderDate, User user) {
+	public Order(Long id, double totalAmount, String status, Date orderDate, User user) {
 
 		this.id = id;
 		this.totalAmount = totalAmount;
-		this.paymentMode = paymentMode;
 		this.status = status;
 		this.orderDate = orderDate;
 		this.user = user;
@@ -62,20 +66,20 @@ public class Order {
 		this.totalAmount = totalAmount;
 	}
 
-	public String getPaymentMode() {
-		return paymentMode;
-	}
-
-	public void setPaymentMode(String paymentMode) {
-		this.paymentMode = paymentMode;
-	}
-
 	public String getStatus() {
 		return status;
 	}
 
 	public void setStatus(String status) {
 		this.status = status;
+	}
+
+	public String getDeliveryTime() {
+		return deliveryTime;
+	}
+
+	public void setDeliveryTime(String deliveryTime) {
+		this.deliveryTime = deliveryTime;
 	}
 
 	public Date getOrderDate() {
@@ -100,6 +104,14 @@ public class Order {
 
 	public void setItems(java.util.List<OrderItem> items) {
 		this.items = items;
+	}
+
+	public Payment getPayment() {
+		return payment;
+	}
+
+	public void setPayment(Payment payment) {
+		this.payment = payment;
 	}
 
 }

@@ -405,13 +405,11 @@
                   <p style="color:rgba(255,255,255,1.0);font-size:0.82rem;margin-bottom:14px;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;">${p.description}</p>
                   <div class="d-flex justify-content-between align-items-center">
                     <span class="price-tag">₹${p.price}</span>
-                    <form action="${pageContext.request.contextPath}/addToCart" method="post" style="margin:0;">
-                      <input type="hidden" name="productId" value="${p.id}">
-                      <input type="hidden" name="quantity" value="1">
-                      <button type="submit" class="btn-primary-premium" style="padding:8px 20px; font-size:0.82rem; border:none; border-radius:12px; cursor:pointer;">
+                    <div style="margin:0;">
+                      <button type="button" class="btn-primary-premium" onclick="addToCartAjax(this, ${p.id})" style="padding:8px 20px; font-size:0.82rem; border:none; border-radius:12px; cursor:pointer;">
                         <i class="fas fa-plus"></i> Add
                       </button>
-                    </form>
+                    </div>
                   </div>
                 </div>
               </div>

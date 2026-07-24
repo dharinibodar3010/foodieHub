@@ -58,7 +58,6 @@
     background: var(--dark) !important;
     color: var(--text-primary) !important;
     min-height: 100vh;
-    overflow-x: hidden;
   }
   
   h1, h2, h3, h4, h5, h6, p, label, li {
@@ -436,6 +435,19 @@
     font-size: 0.9rem;
   }
 
+  /* === ADMIN STICKY HEADER === */
+  .admin-page-header {
+    position: sticky;
+    top: 0;
+    z-index: 99;
+    background: rgba(10, 10, 15, 0.95);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    padding: 24px 32px;
+    margin: -32px -32px 32px -32px;
+    border-bottom: 1px solid var(--dark-border);
+  }
+
   /* === DIVIDER === */
   .divider-premium {
     height: 1px;
@@ -636,9 +648,33 @@
   [onmouseout*="rgba(255, 255, 255, 0."] {
       color: #ffffff !important;
   }
+  /* === PAGE TRANSITION & PROGRESS BAR === */
+  #page-progress-bar {
+    position: fixed;
+    top: 0;
+    left: 0;
+    height: 3px;
+    width: 0%;
+    background: linear-gradient(90deg, #FF5E00, #FFD700, #FF5E00);
+    background-size: 200% 100%;
+    z-index: 99999;
+    transition: width 0.3s ease;
+    animation: progress-shimmer 1.5s linear infinite;
+    box-shadow: 0 0 10px rgba(255,94,0,0.6);
+    display: none;
+  }
+  @keyframes progress-shimmer {
+    0%   { background-position: 200% 0; }
+    100% { background-position: -200% 0; }
+  }
+
+  /* Smooth page fade-in (Removed) */
 </style>
 </head>
 <body>
+
+<!-- Top Progress Bar -->
+<div id="page-progress-bar"></div>
 
 <!-- Splash Screen Loader (Runs once per session) -->
 <div id="app-loader" style="position:fixed; top:0; left:0; width:100%; height:100%; background:var(--dark); z-index:99999; display:none; flex-direction:column; align-items:center; justify-content:center; transition:opacity 0.5s ease;">
@@ -659,12 +695,13 @@
 </div>
 
 <script>
+  // === SPLASH SCREEN (only first visit) ===
   var isAdminPanel = ${not empty hideNavbar};
   var sessionKey = isAdminPanel ? 'adminAppLoaded' : 'userAppLoaded';
 
   if (!sessionStorage.getItem(sessionKey)) {
     document.getElementById('app-loader').style.display = 'flex';
-    document.body.style.overflow = 'hidden'; // prevent scrolling while loading
+    document.body.style.overflow = 'hidden';
 
     window.addEventListener('load', function() {
       setTimeout(function() {
@@ -673,13 +710,18 @@
           loader.style.opacity = '0';
           setTimeout(function() { 
             loader.style.display = 'none'; 
-            document.body.style.overflow = 'auto'; // enable scrolling
-          }, 400);
+            document.body.style.overflow = 'auto';
+          }, 300);
         }
         sessionStorage.setItem(sessionKey, 'true');
-      }, 3000); // 3 seconds delay
+      }, 3000); // 3 seconds splash
     });
   }
+
+  // Removed page fade logic
+  window.addEventListener('load', function() {
+    // Done
+  });
 </script>
 
 <c:if test="${empty requestScope.hideNavbar}">

@@ -5,18 +5,18 @@
   #navMenu { display: none !important; }
 </style>
 
-<div style="background:#0d0d14; border-right:1px solid rgba(255,94,0,0.15); min-height:calc(100vh - 70px); padding:24px 0; position:sticky; top:70px;">
+<div style="background:#0d0d14; border-right:1px solid rgba(255,94,0,0.15); height:100vh; overflow-y:auto; padding:0 0 24px; position:sticky; top:0;" class="custom-scroll">
 
-  <div style="padding:0 16px 20px 16px; border-bottom:1px solid rgba(255,94,0,0.1);">
-    <div style="display:flex;align-items:center;gap:10px;">
+  <div style="padding:24px 16px 20px 16px; border-bottom:1px solid rgba(255,94,0,0.1); position:sticky; top:0; background:#0d0d14; z-index:10;">
+    <a href="${pageContext.request.contextPath}/adminChangePassword" style="display:flex;align-items:center;gap:10px;text-decoration:none;padding:8px;border-radius:12px;transition:background 0.3s;" onmouseover="this.style.background='rgba(255,255,255,0.05)'" onmouseout="this.style.background='transparent'">
       <div style="width:48px;height:48px;background:rgba(255,255,255,0.05);border:1.5px solid rgba(255,94,0,0.5);border-radius:50%;display:flex;align-items:center;justify-content:center;box-shadow:0 0 15px rgba(255,94,0,0.4);overflow:hidden;">
         <img src="https://em-content.zobj.net/source/apple/391/man-cook_1f468-200d-1f373.png" alt="Chef" style="width:85%;height:85%;object-fit:contain;transform:translateY(2px);" onerror="this.src='https://ui-avatars.com/api/?name=Admin&background=FF5E00&color=fff&size=100';">
       </div>
-      <div>
-        <div style="font-weight:700;font-size:0.9rem;color:white;">Admin Panel</div>
+      <div style="flex:1;">
+        <div style="font-weight:700;font-size:0.9rem;color:white;display:flex;align-items:center;gap:6px;">Admin Panel</div>
         <div style="font-size:0.75rem;color:rgba(255,255,255,0.9);">FoodieHub Manager</div>
       </div>
-    </div>
+    </a>
   </div>
 
   <div style="padding:16px 0;">

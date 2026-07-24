@@ -29,10 +29,10 @@
       <c:when test="${not empty orders}">
         <div style="display:flex;flex-direction:column;gap:16px;" id="ordersContainer">
           <c:forEach var="o" items="${orders}">
-            <div class="order-card-main" data-status="${o.status}" style="background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.07);border-radius:20px;overflow:hidden;transition:all 0.3s;">
-
+            <div class="order-card-main" data-status="${o.status}" style="background:rgba(18,18,26,0.7);backdrop-filter:blur(25px);-webkit-backdrop-filter:blur(25px);box-shadow:0 15px 35px rgba(0,0,0,0.4);position:relative;border:1px solid rgba(255,255,255,0.06);border-radius:24px;overflow:hidden;transition:all 0.3s;">
+              <div style="position:absolute;top:-50px;right:-50px;width:150px;height:150px;background:rgba(255,94,0,0.15);border-radius:50%;filter:blur(40px);pointer-events:none;z-index:0;"></div>
               <!-- Order Header -->
-              <div style="background:rgba(255,255,255,0.025);padding:18px 24px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:12px;border-bottom:1px solid rgba(255,255,255,0.05);">
+              <div style="position:relative;z-index:2;background:rgba(255,255,255,0.025);padding:18px 24px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:12px;border-bottom:1px solid rgba(255,255,255,0.05);">
                 <div style="display:flex;align-items:center;gap:16px;flex-wrap:wrap;">
                   <div>
                     <div style="font-size:0.72rem;color:rgba(255,255,255,0.35);font-weight:600;text-transform:uppercase;letter-spacing:1px;margin-bottom:3px;">Order ID</div>
@@ -46,7 +46,12 @@
                   <div style="width:1px;height:36px;background:rgba(255,255,255,0.07);"></div>
                   <div>
                     <div style="font-size:0.72rem;color:rgba(255,255,255,0.35);font-weight:600;text-transform:uppercase;letter-spacing:1px;margin-bottom:3px;">Payment</div>
-                    <div style="font-weight:600;font-size:0.88rem;">${o.paymentMode}</div>
+                    <div style="font-weight:600;font-size:0.88rem;">
+                      <c:choose>
+                        <c:when test="${o.payment != null}">${o.payment.paymentMode}</c:when>
+                        <c:otherwise>Pending</c:otherwise>
+                      </c:choose>
+                    </div>
                   </div>
                 </div>
 
@@ -62,7 +67,7 @@
               </div>
 
               <!-- Order Actions -->
-              <div style="padding:16px 24px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:12px;">
+              <div style="position:relative;z-index:2;padding:16px 24px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:12px;">
                 <p style="margin:0;color:rgba(255,255,255,1.0);font-size:0.85rem;">
                   <i class="fas fa-map-marker-alt me-2" style="color:#ff4500;"></i>
                   Delivery to Rajkot, Gujarat
@@ -97,7 +102,7 @@
                       </c:set>
                     </c:otherwise>
                   </c:choose>
-                  <button data-rows="${fn:escapeXml(invoiceRows)}" onclick="generateInvoice(this, '${o.id}', '${o.orderDate}', '${o.paymentMode}', '${o.totalAmount}', '${not empty o.user ? fn:escapeXml(o.user.name) : 'Customer'}', '${not empty o.user ? fn:escapeXml(o.user.mobile) : ''}')" style="background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.1);border-radius:10px;padding:8px 18px;color:rgba(255,255,255,1.0);font-size:0.82rem;font-weight:600;cursor:pointer;transition:all 0.3s;" onmouseover="this.style.background='rgba(255,255,255,0.08)'" onmouseout="this.style.background='rgba(255,255,255,0.05)'">
+                  <button data-rows="${fn:escapeXml(invoiceRows)}" onclick="generateInvoice(this, '${o.id}', '${o.orderDate}', '${not empty o.payment ? o.payment.paymentMode : 'N/A'}', '${o.totalAmount}', '${not empty o.user ? fn:escapeXml(o.user.name) : 'Customer'}', '${not empty o.user ? fn:escapeXml(o.user.mobile) : ''}')" style="background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.1);border-radius:10px;padding:8px 18px;color:rgba(255,255,255,1.0);font-size:0.82rem;font-weight:600;cursor:pointer;transition:all 0.3s;" onmouseover="this.style.background='rgba(255,255,255,0.08)'" onmouseout="this.style.background='rgba(255,255,255,0.05)'">
                     <i class="fas fa-file-invoice me-1"></i> Invoice
                   </button>
                   <button onclick="openTrackModal('${o.id}', '${o.status}')" style="background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.1);border-radius:10px;padding:8px 18px;color:rgba(255,255,255,1.0);font-size:0.82rem;font-weight:600;cursor:pointer;transition:all 0.3s;" onmouseover="this.style.background='rgba(255,255,255,0.08)'" onmouseout="this.style.background='rgba(255,255,255,0.05)'">
@@ -150,9 +155,9 @@
                 <button style="background:rgba(255,69,0,0.1);border:1px solid rgba(255,69,0,0.3);border-radius:10px;padding:8px 18px;color:#ff4500;font-size:0.82rem;font-weight:600;cursor:pointer;" onclick="showToastNotif('Order requeued!')">
                   <i class="fas fa-redo-alt me-1"></i> Reorder
                 </button>
-                <a href="${pageContext.request.contextPath}/order-success" style="background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.1);border-radius:10px;padding:8px 18px;color:rgba(255,255,255,1.0);font-size:0.82rem;font-weight:600;cursor:pointer;text-decoration:none;">
+                <button onclick="openTrackModal('1001', 'On The Way')" style="background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.1);border-radius:10px;padding:8px 18px;color:rgba(255,255,255,1.0);font-size:0.82rem;font-weight:600;cursor:pointer;transition:all 0.3s;" onmouseover="this.style.background='rgba(255,255,255,0.08)'" onmouseout="this.style.background='rgba(255,255,255,0.05)'">
                   <i class="fas fa-map-marker-alt me-1" style="color:#ff4500;"></i> Track
-                </a>
+                </button>
               </div>
             </div>
           </div>

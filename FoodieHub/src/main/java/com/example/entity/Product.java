@@ -10,6 +10,7 @@ import jakarta.persistence.OneToMany;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.Table;
+import jakarta.persistence.Transient;
 import java.util.List;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
@@ -35,9 +36,15 @@ public class Product {
 	@JoinColumn(name = "category_id")
 	private Category category;
 
-	@OneToMany(mappedBy = "product", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+	@OneToMany(mappedBy = "product", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
 	@JsonIgnore
 	private List<Review> reviews;
+
+	@Transient
+	private Double cachedAverageRating;
+
+	@Transient
+	private Integer cachedReviewCount;
 
 	public Product() {
 
@@ -120,7 +127,15 @@ public class Product {
 		this.reviews = reviews;
 	}
 
+	public void setCachedRatingStats(double averageRating, int reviewCount) {
+		this.cachedAverageRating = averageRating;
+		this.cachedReviewCount = reviewCount;
+	}
+
 	public double getAverageRating() {
+		if (cachedAverageRating != null) {
+			return cachedAverageRating;
+		}
 		if (reviews == null || reviews.isEmpty()) {
 			return 0.0;
 		}
@@ -128,10 +143,13 @@ public class Product {
 		for (Review r : reviews) {
 			sum += r.getRating();
 		}
-		return Math.round((sum / reviews.size()) * 10.0) / 10.0; // round to 1 decimal
+		return Math.round((sum / reviews.size()) * 10.0) / 10.0;
 	}
 
 	public int getReviewCount() {
+		if (cachedReviewCount != null) {
+			return cachedReviewCount;
+		}
 		return reviews == null ? 0 : reviews.size();
 	}
 }

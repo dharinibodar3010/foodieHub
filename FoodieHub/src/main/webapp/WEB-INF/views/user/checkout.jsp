@@ -26,12 +26,22 @@
   }
 
   .checkout-card {
-    background: rgba(255,255,255,0.03);
-    border: 1px solid rgba(255,255,255,0.07);
-    border-radius: 20px;
+    background: rgba(18,18,26,0.7);
+    border: 1px solid rgba(255,255,255,0.06);
+    border-radius: 24px;
     padding: 28px;
     margin-bottom: 24px;
+    backdrop-filter: blur(25px);
+    -webkit-backdrop-filter: blur(25px);
+    box-shadow: 0 15px 35px rgba(0,0,0,0.4);
+    position: relative;
+    overflow: hidden;
   }
+  .checkout-card::before {
+    content: ''; position: absolute; top: -50px; right: -50px; width: 150px; height: 150px;
+    background: rgba(255,94,0,0.15); border-radius: 50%; filter: blur(40px); pointer-events: none; z-index: 0;
+  }
+  .checkout-card > * { position: relative; z-index: 2; }
 
   .payment-method-card {
     background: rgba(255,255,255,0.03);
@@ -214,38 +224,28 @@
           </div>
 
           <div class="row g-3">
-            <div class="col-md-6">
-              <label class="form-label-premium">Full Name</label>
-              <div style="position:relative;">
-                <i class="fas fa-user" style="position:absolute;left:14px;top:50%;transform:translateY(-50%);color:rgba(255,255,255,1.0);font-size:0.85rem;"></i>
-                <input type="text" class="form-premium w-100" style="padding-left:40px !important;" placeholder="Your full name" value="">
-              </div>
-            </div>
-            <div class="col-md-6">
-              <label class="form-label-premium">Mobile Number</label>
-              <div style="position:relative;">
-                <i class="fas fa-phone" style="position:absolute;left:14px;top:50%;transform:translateY(-50%);color:rgba(255,255,255,1.0);font-size:0.85rem;"></i>
-                <input type="tel" class="form-premium w-100" style="padding-left:40px !important;" placeholder="+91 XXXXX XXXXX">
-              </div>
-            </div>
             <div class="col-12">
-              <label class="form-label-premium">Street Address</label>
-              <div style="position:relative;">
-                <i class="fas fa-home" style="position:absolute;left:14px;top:14px;color:rgba(255,255,255,1.0);font-size:0.85rem;"></i>
-                <textarea class="form-premium w-100" style="padding-left:40px !important;resize:none;height:80px;" placeholder="House no., Street, Area..."></textarea>
+              <div id="addressDisplayMode" style="display:block;">
+                <div style="background:rgba(255,255,255,0.02);border:1px solid rgba(255,255,255,0.08);border-radius:12px;padding:16px;display:flex;justify-content:space-between;align-items:flex-start;">
+                  <div style="flex:1;">
+                    <div style="font-weight:700;margin-bottom:6px;"><i class="fas fa-home" style="color:#ff4500;margin-right:6px;"></i> Current Address</div>
+                    <div id="addressTextDisplay" style="color:rgba(255,255,255,0.7);font-size:0.9rem;line-height:1.5;white-space:pre-wrap;">${sessionScope.user.address}</div>
+                  </div>
+                  <button type="button" onclick="editAddress()" style="background:rgba(255,69,0,0.1);border:1px solid rgba(255,69,0,0.3);color:#ff4500;font-size:0.8rem;font-weight:600;padding:6px 12px;border-radius:6px;cursor:pointer;transition:all 0.3s;" onmouseover="this.style.background='rgba(255,69,0,0.2)'" onmouseout="this.style.background='rgba(255,69,0,0.1)'">
+                    <i class="fas fa-edit"></i> Change
+                  </button>
+                </div>
               </div>
-            </div>
-            <div class="col-md-4">
-              <label class="form-label-premium">City</label>
-              <input type="text" class="form-premium w-100" placeholder="City" value="Rajkot">
-            </div>
-            <div class="col-md-4">
-              <label class="form-label-premium">State</label>
-              <input type="text" class="form-premium w-100" placeholder="State" value="Gujarat">
-            </div>
-            <div class="col-md-4">
-              <label class="form-label-premium">PIN Code</label>
-              <input type="text" class="form-premium w-100" placeholder="360001">
+
+              <div id="addressEditMode" style="display:none;position:relative;">
+                <label class="form-label-premium">Update Address</label>
+                <textarea id="checkoutAddress" class="form-premium w-100" style="resize:none;height:100px;" placeholder="Enter your full delivery address...">${sessionScope.user.address}</textarea>
+                <div style="text-align:right;margin-top:10px;">
+                  <button type="button" onclick="saveAddress()" style="background:#ff4500;color:white;border:none;border-radius:8px;padding:8px 16px;font-weight:600;font-size:0.85rem;cursor:pointer;">
+                    <i class="fas fa-check"></i> Done
+                  </button>
+                </div>
+              </div>
             </div>
           </div>
         </div>
@@ -257,15 +257,15 @@
           </div>
           <div class="row g-3">
             <div class="col-md-4">
-              <div onclick="selectDelivery(this)" style="background:rgba(255,69,0,0.1);border:1.5px solid rgba(255,69,0,0.4);border-radius:12px;padding:16px;cursor:pointer;text-align:center;transition:all 0.3s;">
+              <div onclick="selectDelivery(this, 'Express')" style="background:rgba(255,69,0,0.1);border:1.5px solid rgba(255,69,0,0.4);border-radius:12px;padding:16px;cursor:pointer;text-align:center;transition:all 0.3s;" id="del-express">
                 <div style="font-size:1.4rem;margin-bottom:6px;">⚡</div>
                 <div style="font-weight:700;font-size:0.9rem;margin-bottom:4px;">Express</div>
                 <div style="font-size:0.75rem;color:rgba(255,255,255,1.0);">20-30 min</div>
-                <div style="font-size:0.8rem;font-weight:700;color:#28a745;margin-top:6px;">FREE</div>
+                <div style="font-size:0.8rem;font-weight:700;color:#ff4500;margin-top:6px;">+₹40</div>
               </div>
             </div>
             <div class="col-md-4">
-              <div onclick="selectDelivery(this)" style="background:rgba(255,255,255,0.03);border:1.5px solid rgba(255,255,255,0.08);border-radius:12px;padding:16px;cursor:pointer;text-align:center;transition:all 0.3s;">
+              <div onclick="selectDelivery(this, 'Standard')" style="background:rgba(255,255,255,0.03);border:1.5px solid rgba(255,255,255,0.08);border-radius:12px;padding:16px;cursor:pointer;text-align:center;transition:all 0.3s;" id="del-standard">
                 <div style="font-size:1.4rem;margin-bottom:6px;">🛵</div>
                 <div style="font-weight:700;font-size:0.9rem;margin-bottom:4px;">Standard</div>
                 <div style="font-size:0.75rem;color:rgba(255,255,255,1.0);">45-60 min</div>
@@ -273,89 +273,21 @@
               </div>
             </div>
             <div class="col-md-4">
-              <div onclick="selectDelivery(this)" style="background:rgba(255,255,255,0.03);border:1.5px solid rgba(255,255,255,0.08);border-radius:12px;padding:16px;cursor:pointer;text-align:center;transition:all 0.3s;">
+              <div onclick="selectDelivery(this, 'Scheduled')" style="background:rgba(255,255,255,0.03);border:1.5px solid rgba(255,255,255,0.08);border-radius:12px;padding:16px;cursor:pointer;text-align:center;transition:all 0.3s;position:relative;" id="del-scheduled">
                 <div style="font-size:1.4rem;margin-bottom:6px;">📅</div>
                 <div style="font-weight:700;font-size:0.9rem;margin-bottom:4px;">Scheduled</div>
                 <div style="font-size:0.75rem;color:rgba(255,255,255,1.0);">Choose time</div>
                 <div style="font-size:0.8rem;font-weight:700;color:#28a745;margin-top:6px;">FREE</div>
+                
+                <!-- Scheduled Delivery Time Picker -->
+                <div id="scheduledTimeContainer" style="display:none;margin-top:12px;text-align:left;" onclick="event.stopPropagation()">
+                  <input type="time" id="scheduledTimeInput" class="form-premium w-100" style="padding:6px 12px !important;font-size:0.8rem;border-radius:8px;">
+                </div>
               </div>
             </div>
           </div>
         </div>
 
-        <!-- Payment Methods -->
-        <div class="checkout-card">
-          <div class="checkout-section-title">
-            <i class="fas fa-credit-card"></i> Payment Method
-          </div>
-
-          <!-- Razorpay -->
-          <div class="payment-method-card selected" id="pm-razorpay" onclick="selectPayment('razorpay')">
-            <div class="radio-custom"><div class="radio-dot"></div></div>
-            <div class="payment-method-icon">💳</div>
-            <div>
-              <div class="payment-method-name">Razorpay — UPI / Card / Netbanking</div>
-              <div class="payment-method-desc">Pay securely via Razorpay gateway</div>
-            </div>
-            <div class="razorpay-badge">Recommended</div>
-          </div>
-
-          <!-- UPI -->
-          <div class="payment-method-card" id="pm-upi" onclick="selectPayment('upi')">
-            <div class="radio-custom"><div class="radio-dot"></div></div>
-            <div class="payment-method-icon">📱</div>
-            <div>
-              <div class="payment-method-name">UPI Direct (GPay / PhonePe / Paytm)</div>
-              <div class="payment-method-desc">Instant bank transfer via UPI</div>
-            </div>
-          </div>
-
-          <!-- COD -->
-          <div class="payment-method-card" id="pm-cod" onclick="selectPayment('cod')">
-            <div class="radio-custom"><div class="radio-dot"></div></div>
-            <div class="payment-method-icon">💵</div>
-            <div>
-              <div class="payment-method-name">Cash on Delivery (COD)</div>
-              <div class="payment-method-desc">Pay when your order arrives</div>
-            </div>
-          </div>
-
-          <!-- Card Details (for Razorpay demo) -->
-          <div id="razorpaySection" style="margin-top:20px;padding:20px;background:rgba(23,108,232,0.05);border:1px solid rgba(23,108,232,0.2);border-radius:14px;">
-            <div style="display:flex;align-items:center;gap:10px;margin-bottom:16px;">
-              <img src="https://razorpay.com/favicon.ico" width="20" alt="Razorpay" style="border-radius:4px;">
-              <span style="font-weight:600;font-size:0.88rem;color:#4b9aff;">Powered by Razorpay</span>
-              <span style="margin-left:auto;font-size:0.75rem;color:rgba(255,255,255,0.35);">🔒 256-bit SSL Secured</span>
-            </div>
-            <div style="display:flex;gap:10px;flex-wrap:wrap;">
-              <img src="https://upload.wikimedia.org/wikipedia/commons/0/04/Visa.svg" height="22" alt="Visa" style="opacity:0.7;">
-              <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/b/b7/MasterCard_Logo.svg/300px-MasterCard_Logo.svg.png" height="22" alt="Mastercard" style="opacity:0.7;">
-              <span style="font-size:0.8rem;color:rgba(255,255,255,0.4);align-self:center;">+ UPI, Netbanking, Wallets</span>
-            </div>
-          </div>
-
-          <!-- UPI Details Section -->
-          <div id="upiSection" style="display:none;margin-top:20px;padding:20px;background:rgba(0,186,136,0.05);border:1px solid rgba(0,186,136,0.2);border-radius:14px;text-align:center;">
-            <div style="margin-bottom:12px;display:flex;gap:15px;justify-content:center;">
-              <img src="https://upload.wikimedia.org/wikipedia/commons/f/f2/Google_Pay_Logo.svg" height="24" alt="GPay" style="opacity:0.9;">
-              <img src="https://upload.wikimedia.org/wikipedia/commons/7/71/PhonePe_Logo.svg" height="24" alt="PhonePe" style="opacity:0.9;">
-              <img src="https://upload.wikimedia.org/wikipedia/commons/2/24/Paytm_Logo_%28standalone%29.svg" height="24" alt="Paytm" style="opacity:0.9;">
-            </div>
-            <img src="https://upload.wikimedia.org/wikipedia/commons/d/d0/QR_code_for_mobile_English_Wikipedia.svg" width="100" style="border-radius:10px;border:2px solid #00ba88;padding:4px;background:white;" alt="UPI QR">
-            <p style="color:rgba(255,255,255,0.8);font-size:0.85rem;margin:12px 0 0;">
-              Scan QR or click "Place Order Securely" to pay via your UPI app.<br>
-              <span style="font-size:0.75rem;color:rgba(255,255,255,0.4);">Transactions are processed securely by Razorpay.</span>
-            </p>
-          </div>
-
-          <div id="codSection" style="display:none;margin-top:16px;padding:16px;background:rgba(40,167,69,0.08);border:1px solid rgba(40,167,69,0.2);border-radius:12px;">
-            <p style="color:rgba(255,255,255,1.0);font-size:0.85rem;margin:0;">
-              <i class="fas fa-info-circle" style="color:#28a745;margin-right:8px;"></i>
-              Please keep exact change ready. Our delivery partner does not carry change.
-            </p>
-          </div>
-
-        </div>
 
       </div>
 
@@ -386,7 +318,7 @@
               <span>Subtotal</span><span style="color:white;font-weight:600;">₹${subtotal}</span>
             </div>
             <div style="display:flex;justify-content:space-between;font-size:0.88rem;color:rgba(255,255,255,1.0);">
-              <span>Delivery</span><span style="color:#28a745;font-weight:600;">FREE</span>
+              <span>Delivery</span><span id="deliveryChargeText" style="color:#28a745;font-weight:600;">FREE</span>
             </div>
             <div style="display:flex;justify-content:space-between;font-size:0.88rem;color:rgba(255,255,255,1.0);">
               <span>GST (5%)</span><span style="color:white;font-weight:600;">₹${tax}</span>
@@ -411,9 +343,10 @@
             <i class="fas fa-lock"></i> Place Order Securely
           </button>
 
-          <!-- Hidden form for COD -->
-          <form id="codForm" action="${pageContext.request.contextPath}/payment" method="post" style="display:none;">
-            <input type="hidden" name="paymentMode" id="paymentModeInput" value="COD">
+          <!-- Hidden form for Order Creation -->
+          <form id="codForm" action="${pageContext.request.contextPath}/place-order" method="post" style="display:none;">
+            <input type="hidden" name="address" id="formAddress" value="Standard Address">
+            <input type="hidden" name="deliveryTime" id="formDeliveryTime" value="30 mins">
             <input type="hidden" name="totalAmount" id="totalAmountInput" value="${totalAmount}">
           </form>
 
@@ -429,101 +362,94 @@
 </div>
 
 <script>
-let selectedPayment = 'razorpay';
+let selectedDeliveryType = 'Express'; // Default
+const baseTotal = ${totalAmount};
 
-function selectPayment(method) {
-  selectedPayment = method;
-
-  // Reset all
-  ['razorpay','upi','cod'].forEach(m => {
-    const el = document.getElementById('pm-' + m);
-    el.classList.remove('selected');
-  });
-
-  document.getElementById('pm-' + method).classList.add('selected');
-  document.getElementById('razorpaySection').style.display = (method === 'razorpay') ? 'block' : 'none';
-  document.getElementById('upiSection').style.display = (method === 'upi') ? 'block' : 'none';
-  document.getElementById('codSection').style.display = (method === 'cod') ? 'block' : 'none';
-}
-
-function selectDelivery(el) {
-  document.querySelectorAll('[onclick="selectDelivery(this)"]').forEach(d => {
+function selectDelivery(el, type) {
+  selectedDeliveryType = type;
+  
+  // Reset styles
+  document.querySelectorAll('[id^="del-"]').forEach(d => {
     d.style.background = 'rgba(255,255,255,0.03)';
     d.style.borderColor = 'rgba(255,255,255,0.08)';
   });
+  
+  // Highlight selected
   el.style.background = 'rgba(255,69,0,0.1)';
   el.style.borderColor = 'rgba(255,69,0,0.4)';
+  
+  // Show/Hide time picker
+  document.getElementById('scheduledTimeContainer').style.display = (type === 'Scheduled') ? 'block' : 'none';
+  
+  // Calculate total
+  const deliveryFee = (type === 'Express') ? 40 : 0;
+  const newTotal = baseTotal + deliveryFee;
+  
+  // Update Order Summary UI
+  const deliveryChargeText = document.getElementById('deliveryChargeText');
+  if(deliveryFee > 0) {
+    deliveryChargeText.innerText = '+₹' + deliveryFee;
+    deliveryChargeText.style.color = '#ff4500';
+  } else {
+    deliveryChargeText.innerText = 'FREE';
+    deliveryChargeText.style.color = '#28a745';
+  }
+  
+  // Update UI Total
+  document.getElementById('checkoutTotal').innerText = '₹' + newTotal;
+  document.getElementById('totalAmountInput').value = newTotal;
 }
 
 function placeOrder() {
   const btn = document.getElementById('placeOrderBtn');
-  const totalAmount = ${totalAmount};
+  btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Processing Order...';
+  btn.disabled = true;
 
-  if (selectedPayment === 'razorpay' || selectedPayment === 'upi') {
-    // Razorpay Demo Integration
-    btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Processing...';
-    btn.disabled = true;
-
-    const options = {
-      key: 'rzp_test_SYu5g0dpspSt6h', // ← Replace with your Razorpay Test Key
-      amount: totalAmount * 100, // Amount in paise
-      currency: 'INR',
-      name: 'FoodieHub',
-      description: 'Food Order Payment',
-      image: 'https://via.placeholder.com/150x60?text=FoodieHub',
-      handler: function(response) {
-        // Payment successful
-        console.log('Payment ID:', response.razorpay_payment_id);
-        document.getElementById('paymentModeInput').value = 'Razorpay - ' + response.razorpay_payment_id;
-        document.getElementById('totalAmountInput').value = totalAmount;
-        document.getElementById('codForm').submit();
-      },
-      prefill: {
-        name: 'FoodieHub Customer',
-        email: 'customer@foodiehub.com',
-        contact: '9876543210'
-      },
-      notes: {
-        address: 'Rajkot, Gujarat'
-      },
-      theme: {
-        color: '#ff4500'
-      },
-      modal: {
-        ondismiss: function() {
-          btn.innerHTML = '<i class="fas fa-lock"></i> Place Order Securely';
-          btn.disabled = false;
-        }
-      }
-    };
-
-    try {
-      const rzp = new Razorpay(options);
-      rzp.on('payment.failed', function(response) {
-        alert('Payment failed: ' + response.error.description);
-        btn.innerHTML = '<i class="fas fa-lock"></i> Place Order Securely';
-        btn.disabled = false;
-      });
-      rzp.open();
-    } catch(e) {
-      // Fallback if Razorpay script not loaded
-      alert('Razorpay Demo:\n\nIn production, add your API key.\nFor now, redirecting as Razorpay payment...');
-      document.getElementById('paymentModeInput').value = 'Razorpay';
-      document.getElementById('totalAmountInput').value = totalAmount;
-      document.getElementById('codForm').submit();
-    }
-
-  } else {
-    // COD
-    btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Placing Order...';
-    btn.disabled = true;
-    setTimeout(() => {
-      document.getElementById('paymentModeInput').value = 'Cash on Delivery';
-      document.getElementById('totalAmountInput').value = totalAmount;
-      document.getElementById('codForm').submit();
-    }, 1200);
+  const address = document.getElementById('checkoutAddress').value;
+  if(!address || address.trim() === '') {
+    alert('Please provide a delivery address.');
+    btn.innerHTML = '<i class="fas fa-lock"></i> Place Order Securely';
+    btn.disabled = false;
+    editAddress();
+    return;
   }
+
+  let deliveryTimeStr = selectedDeliveryType;
+  if(selectedDeliveryType === 'Scheduled') {
+    const timeVal = document.getElementById('scheduledTimeInput').value;
+    if(!timeVal) {
+      alert('Please choose a scheduled time.');
+      btn.innerHTML = '<i class="fas fa-lock"></i> Place Order Securely';
+      btn.disabled = false;
+      return;
+    }
+    deliveryTimeStr += " (" + timeVal + ")";
+  }
+
+  document.getElementById('formAddress').value = address;
+  document.getElementById('formDeliveryTime').value = deliveryTimeStr;
+  document.getElementById('codForm').submit();
 }
+
+function editAddress() {
+  document.getElementById('addressDisplayMode').style.display = 'none';
+  document.getElementById('addressEditMode').style.display = 'block';
+  document.getElementById('checkoutAddress').focus();
+}
+
+function saveAddress() {
+  const newAddr = document.getElementById('checkoutAddress').value;
+  if(newAddr && newAddr.trim() !== '') {
+    document.getElementById('addressTextDisplay').innerText = newAddr;
+  }
+  document.getElementById('addressEditMode').style.display = 'none';
+  document.getElementById('addressDisplayMode').style.display = 'block';
+}
+
+// Initial selection
+document.addEventListener('DOMContentLoaded', () => {
+  selectDelivery(document.getElementById('del-express'), 'Express');
+});
 </script>
 
 <%@ include file="../common/footer.jsp"%>

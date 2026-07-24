@@ -8,7 +8,8 @@
   <div style="width:260px;flex-shrink:0;"><%@ include file="../common/sidebar.jsp"%></div>
   <div style="flex:1;padding:32px;min-height:calc(100vh - 70px);">
 
-    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:32px;flex-wrap:wrap;gap:16px;">
+    <div style="position:sticky; top:0; z-index:98; background:rgba(13,13,20,0.85); backdrop-filter:blur(25px); -webkit-backdrop-filter:blur(25px); padding:24px 32px 16px 32px; margin:-32px -32px 24px -32px; border-bottom:1px solid rgba(255,255,255,0.04); box-shadow: 0 10px 40px rgba(0,0,0,0.3);">
+      <div class="admin-page-header" style="display:flex;justify-content:space-between;align-items:center;margin-bottom:16px;flex-wrap:wrap;gap:16px;">
       <div>
         <h2 style="font-weight:800;font-size:1.5rem;margin:0;">Manage <span class="text-gradient">Orders</span></h2>
         <p style="color:rgba(255,255,255,1.0);font-size:0.85rem;margin:6px 0 0;">View and update order status</p>
@@ -20,18 +21,20 @@
       </div>
     </div>
 
-    <div style="background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.06);border-radius:24px;overflow:hidden;">
-      <div style="overflow-x:auto;">
+    <div style="background:rgba(18,18,26,0.7);border:1px solid rgba(255,255,255,0.06);border-radius:24px;padding:28px;backdrop-filter:blur(25px);-webkit-backdrop-filter:blur(25px);box-shadow:0 15px 35px rgba(0,0,0,0.4);position:relative;overflow:hidden;">
+      <div style="position:absolute;top:-50px;right:-50px;width:200px;height:200px;background:rgba(99,102,241,0.08);border-radius:50%;filter:blur(40px);pointer-events:none;"></div>
+      <div style="position:relative;z-index:2;">
+      <div style="overflow-x:auto; overflow-y:auto; max-height:calc(100vh - 250px); padding-right:5px;">
         <table style="width:100%;border-collapse:collapse;" id="orderTable">
-          <thead>
+          <thead style="box-shadow: 0 2px 5px rgba(0,0,0,0.5);">
             <tr style="background:rgba(99,102,241,0.08);border-bottom:1px solid rgba(99,102,241,0.15);">
-              <th style="padding:14px 16px;text-align:left;font-size:0.72rem;font-weight:700;text-transform:uppercase;letter-spacing:0.5px;color:rgba(255,255,255,1.0);">Order ID</th>
-              <th style="padding:14px 16px;text-align:left;font-size:0.72rem;font-weight:700;text-transform:uppercase;letter-spacing:0.5px;color:rgba(255,255,255,1.0);">Customer</th>
-              <th style="padding:14px 16px;text-align:left;font-size:0.72rem;font-weight:700;text-transform:uppercase;letter-spacing:0.5px;color:rgba(255,255,255,1.0);">Date</th>
-              <th style="padding:14px 16px;text-align:left;font-size:0.72rem;font-weight:700;text-transform:uppercase;letter-spacing:0.5px;color:rgba(255,255,255,1.0);">Amount</th>
-              <th style="padding:14px 16px;text-align:left;font-size:0.72rem;font-weight:700;text-transform:uppercase;letter-spacing:0.5px;color:rgba(255,255,255,1.0);">Payment</th>
-              <th style="padding:14px 16px;text-align:left;font-size:0.72rem;font-weight:700;text-transform:uppercase;letter-spacing:0.5px;color:rgba(255,255,255,1.0);">Status</th>
-              <th style="padding:14px 16px;text-align:center;font-size:0.72rem;font-weight:700;text-transform:uppercase;letter-spacing:0.5px;color:rgba(255,255,255,1.0);">Update Status</th>
+              <th style="position: sticky; top: 0; background: #151515; z-index: 10; padding:14px 16px;text-align:left;font-size:0.72rem;font-weight:700;text-transform:uppercase;letter-spacing:0.5px;color:rgba(255,255,255,1.0);">Order ID</th>
+              <th style="position: sticky; top: 0; background: #151515; z-index: 10; padding:14px 16px;text-align:left;font-size:0.72rem;font-weight:700;text-transform:uppercase;letter-spacing:0.5px;color:rgba(255,255,255,1.0);">Customer</th>
+              <th style="position: sticky; top: 0; background: #151515; z-index: 10; padding:14px 16px;text-align:left;font-size:0.72rem;font-weight:700;text-transform:uppercase;letter-spacing:0.5px;color:rgba(255,255,255,1.0);">Date</th>
+              <th style="position: sticky; top: 0; background: #151515; z-index: 10; padding:14px 16px;text-align:left;font-size:0.72rem;font-weight:700;text-transform:uppercase;letter-spacing:0.5px;color:rgba(255,255,255,1.0);">Amount</th>
+              <th style="position: sticky; top: 0; background: #151515; z-index: 10; padding:14px 16px;text-align:left;font-size:0.72rem;font-weight:700;text-transform:uppercase;letter-spacing:0.5px;color:rgba(255,255,255,1.0);">Payment</th>
+              <th style="position: sticky; top: 0; background: #151515; z-index: 10; padding:14px 16px;text-align:left;font-size:0.72rem;font-weight:700;text-transform:uppercase;letter-spacing:0.5px;color:rgba(255,255,255,1.0);">Status</th>
+              <th style="position: sticky; top: 0; background: #151515; z-index: 10; padding:14px 16px;text-align:center;font-size:0.72rem;font-weight:700;text-transform:uppercase;letter-spacing:0.5px;color:rgba(255,255,255,1.0);">Update Status</th>
             </tr>
           </thead>
           <tbody>
@@ -44,7 +47,12 @@
                 </td>
                 <td style="padding:14px 16px;font-size:0.85rem;color:rgba(255,255,255,1.0);">${o.orderDate}</td>
                 <td style="padding:14px 16px;font-weight:800;font-size:0.92rem;">₹${o.totalAmount}</td>
-                <td style="padding:14px 16px;font-size:0.82rem;">${o.paymentMode}</td>
+                <td style="padding:14px 16px;font-size:0.82rem;">
+                  <c:choose>
+                    <c:when test="${o.payment != null}">${o.payment.paymentMode}</c:when>
+                    <c:otherwise><span style="color:rgba(255,255,255,0.4);">N/A</span></c:otherwise>
+                  </c:choose>
+                </td>
                 <td style="padding:14px 16px;">
                   <span style="padding:4px 10px;border-radius:12px;font-size:0.72rem;font-weight:700;
                     background:${o.status == 'Delivered' || o.status == 'Completed' ? 'rgba(40,167,69,0.15)' : o.status == 'Order Placed' ? 'rgba(255,193,7,0.15)' : 'rgba(255,69,0,0.15)'};
@@ -80,6 +88,8 @@
         </table>
       </div>
     </div>
+  </div>
+  </div>
 
   </div>
 </div>

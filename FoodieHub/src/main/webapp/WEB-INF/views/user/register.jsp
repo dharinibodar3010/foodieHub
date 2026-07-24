@@ -3,6 +3,25 @@
 
 <%@ include file="../common/header.jsp"%>
 
+<style>
+  .auth-card {
+    background: rgba(18,18,26,0.7);
+    border: 1px solid rgba(255,255,255,0.08);
+    border-radius: 28px;
+    padding: 48px 40px;
+    backdrop-filter: blur(25px);
+    -webkit-backdrop-filter: blur(25px);
+    position: relative;
+    z-index: 1;
+    box-shadow: 0 15px 35px rgba(0,0,0,0.4);
+    overflow: hidden;
+  }
+  .auth-card::after {
+    content: ''; position: absolute; bottom: -50px; left: -50px; width: 150px; height: 150px;
+    background: rgba(255,94,0,0.15); border-radius: 50%; filter: blur(40px); pointer-events: none; z-index: -1;
+  }
+  .auth-card > * { position: relative; z-index: 2; }
+</style>
 <div style="min-height:100vh;display:flex;align-items:center;padding:80px 0;position:relative;">
   <div style="position:absolute;inset:0;background:radial-gradient(ellipse at 20% 50%,rgba(255,69,0,0.1) 0%,transparent 50%),radial-gradient(ellipse at 80% 80%,rgba(255,140,0,0.06) 0%,transparent 40%);"></div>
 
@@ -10,7 +29,7 @@
     <div class="row justify-content-center">
       <div class="col-lg-7">
 
-        <div style="background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.08);border-radius:28px;padding:48px 40px;backdrop-filter:blur(20px);box-shadow:0 30px 80px rgba(0,0,0,0.5);position:relative;">
+        <div class="auth-card">
           <!-- Top gradient line -->
           <div style="position:absolute;top:0;left:20%;right:20%;height:2px;background:linear-gradient(to right,transparent,#ff4500,#ffd700,transparent);border-radius:2px;"></div>
 

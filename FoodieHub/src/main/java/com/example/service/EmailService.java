@@ -12,14 +12,21 @@ public class EmailService {
     @Autowired
     private JavaMailSender mailSender;
 
-    @Async
-    public void sendEmail(String toEmail, String subject, String body) {
-        SimpleMailMessage message = new SimpleMailMessage();
-        message.setTo(toEmail);
-        message.setSubject(subject);
-        message.setText(body);
-        message.setFrom("FoodieHub <your-email@gmail.com>");
+    @org.springframework.beans.factory.annotation.Value("${spring.mail.username}")
+    private String fromEmail;
 
-        mailSender.send(message);
+    public void sendEmail(String toEmail, String subject, String body) {
+        java.util.concurrent.CompletableFuture.runAsync(() -> {
+            try {
+                SimpleMailMessage message = new SimpleMailMessage();
+                message.setTo(toEmail);
+                message.setSubject(subject);
+                message.setText(body);
+                message.setFrom("FoodieHub <" + fromEmail + ">");
+                mailSender.send(message);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        });
     }
 }

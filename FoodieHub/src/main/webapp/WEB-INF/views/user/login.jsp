@@ -21,17 +21,24 @@
   }
 
   .auth-card {
-    background: rgba(255,255,255,0.03);
+    background: rgba(18,18,26,0.7);
     border: 1px solid rgba(255,255,255,0.08);
     border-radius: 28px;
     padding: 48px 40px;
-    backdrop-filter: blur(20px);
+    backdrop-filter: blur(25px);
+    -webkit-backdrop-filter: blur(25px);
     position: relative;
     z-index: 1;
     max-width: 460px;
     margin: 0 auto;
-    box-shadow: 0 30px 80px rgba(0,0,0,0.5);
+    box-shadow: 0 15px 35px rgba(0,0,0,0.4);
+    overflow: hidden;
   }
+  .auth-card::after {
+    content: ''; position: absolute; bottom: -50px; left: -50px; width: 150px; height: 150px;
+    background: rgba(255,94,0,0.15); border-radius: 50%; filter: blur(40px); pointer-events: none; z-index: -1;
+  }
+  .auth-card > * { position: relative; z-index: 2; }
 
   .auth-card::before {
     content: '';

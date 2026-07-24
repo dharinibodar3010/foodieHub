@@ -90,4 +90,22 @@ public class CartController {
 		}
 		return "0";
 	}
+
+	@PostMapping("/api/cart/add")
+	@ResponseBody
+	public String addToCartApi(@RequestParam Long productId, @RequestParam(defaultValue = "1") int quantity, HttpSession session) {
+		User user = (User) session.getAttribute("user");
+		if (user == null) {
+			return "unauthorized";
+		}
+		Product product = productService.getProductById(productId);
+		Cart cart = new Cart();
+		cart.setUser(user);
+		cart.setProduct(product);
+		cart.setQuantity(quantity);
+		cartService.addCart(cart);
+		
+		List<Cart> cartItems = cartService.getUserCart(user.getId());
+		return String.valueOf(cartItems.size());
+	}
 }

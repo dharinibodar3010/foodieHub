@@ -8,7 +8,8 @@
   <div style="width:260px;flex-shrink:0;"><%@ include file="../common/sidebar.jsp"%></div>
   <div style="flex:1;padding:32px;min-height:calc(100vh - 70px);">
 
-    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:32px;flex-wrap:wrap;gap:16px;">
+    <div style="position:sticky; top:0; z-index:98; background:rgba(13,13,20,0.85); backdrop-filter:blur(25px); -webkit-backdrop-filter:blur(25px); padding:24px 32px 16px 32px; margin:-32px -32px 24px -32px; border-bottom:1px solid rgba(255,255,255,0.04); box-shadow: 0 10px 40px rgba(0,0,0,0.3);">
+      <div class="admin-page-header" style="display:flex;justify-content:space-between;align-items:center;margin-bottom:16px;flex-wrap:wrap;gap:16px;">
       <div>
         <h2 style="font-weight:800;font-size:1.5rem;margin:0;">Customer <span class="text-gradient">Reviews</span></h2>
         <p style="color:rgba(255,255,255,0.4);font-size:0.85rem;margin:6px 0 0;">Manage food ratings and reviews</p>
@@ -43,20 +44,22 @@
           <i class="fas fa-trash-alt"></i> Delete Selected
         </button>
       </div>
-      <div style="background:rgba(255,255,255,0.02);border:1px solid rgba(255,255,255,0.06);border-radius:24px;overflow:hidden;">
-        <div style="overflow-x:auto;">
+      <div style="background:rgba(18,18,26,0.7);border:1px solid rgba(255,255,255,0.06);border-radius:24px;padding:28px;backdrop-filter:blur(25px);-webkit-backdrop-filter:blur(25px);box-shadow:0 15px 35px rgba(0,0,0,0.4);position:relative;overflow:hidden;">
+        <div style="position:absolute;top:-50px;right:-50px;width:200px;height:200px;background:rgba(255,215,0,0.08);border-radius:50%;filter:blur(40px);pointer-events:none;"></div>
+        <div style="position:relative;z-index:2;">
+        <div style="overflow-x:auto; overflow-y:auto; max-height:calc(100vh - 250px); padding-right:5px;">
         <table style="width:100%;border-collapse:collapse;">
-          <thead>
+          <thead style="box-shadow: 0 2px 5px rgba(0,0,0,0.5);">
             <tr style="background:rgba(255,215,0,0.08);border-bottom:1px solid rgba(255,215,0,0.15);">
-              <th style="padding:14px 16px;width:50px;text-align:center;">
+              <th style="position: sticky; top: 0; background: #151515; z-index: 10; padding:14px 16px;width:50px;text-align:center;">
                 <input type="checkbox" id="selectAllCheckbox" onchange="toggleSelectAll(this)" style="cursor:pointer;width:16px;height:16px;">
               </th>
-              <th style="padding:14px 16px;text-align:left;font-size:0.72rem;font-weight:700;text-transform:uppercase;color:rgba(255,255,255,0.5);">User</th>
-              <th style="padding:14px 16px;text-align:left;font-size:0.72rem;font-weight:700;text-transform:uppercase;color:rgba(255,255,255,0.5);">Product</th>
-              <th style="padding:14px 16px;text-align:left;font-size:0.72rem;font-weight:700;text-transform:uppercase;color:rgba(255,255,255,0.5);">Rating</th>
-              <th style="padding:14px 16px;text-align:left;font-size:0.72rem;font-weight:700;text-transform:uppercase;color:rgba(255,255,255,0.5);">Comment</th>
-              <th style="padding:14px 16px;text-align:left;font-size:0.72rem;font-weight:700;text-transform:uppercase;color:rgba(255,255,255,0.5);">Date</th>
-              <th style="padding:14px 16px;text-align:right;font-size:0.72rem;font-weight:700;text-transform:uppercase;color:rgba(255,255,255,0.5);">Action</th>
+              <th style="position: sticky; top: 0; background: #151515; z-index: 10; padding:14px 16px;text-align:left;font-size:0.72rem;font-weight:700;text-transform:uppercase;color:rgba(255,255,255,0.5);">User</th>
+              <th style="position: sticky; top: 0; background: #151515; z-index: 10; padding:14px 16px;text-align:left;font-size:0.72rem;font-weight:700;text-transform:uppercase;color:rgba(255,255,255,0.5);">Product</th>
+              <th style="position: sticky; top: 0; background: #151515; z-index: 10; padding:14px 16px;text-align:left;font-size:0.72rem;font-weight:700;text-transform:uppercase;color:rgba(255,255,255,0.5);">Rating</th>
+              <th style="position: sticky; top: 0; background: #151515; z-index: 10; padding:14px 16px;text-align:left;font-size:0.72rem;font-weight:700;text-transform:uppercase;color:rgba(255,255,255,0.5);">Comment</th>
+              <th style="position: sticky; top: 0; background: #151515; z-index: 10; padding:14px 16px;text-align:left;font-size:0.72rem;font-weight:700;text-transform:uppercase;color:rgba(255,255,255,0.5);">Date</th>
+              <th style="position: sticky; top: 0; background: #151515; z-index: 10; padding:14px 16px;text-align:right;font-size:0.72rem;font-weight:700;text-transform:uppercase;color:rgba(255,255,255,0.5);">Action</th>
             </tr>
           </thead>
           <tbody>
@@ -65,8 +68,8 @@
                 <td style="padding:14px 16px;text-align:center;">
                   <input type="checkbox" class="review-checkbox" name="reviewIds" value="${r.id}" style="cursor:pointer;width:16px;height:16px;">
                 </td>
-                <td style="padding:14px 16px;font-weight:700;font-size:0.92rem;color:white;">${r.user.name}</td>
-                <td style="padding:14px 16px;font-size:0.85rem;color:rgba(255,255,255,0.8);">${r.product.name}</td>
+                <td style="padding:14px 16px;font-weight:700;font-size:0.92rem;color:white;">${r.user != null ? r.user.name : 'Guest'}</td>
+                <td style="padding:14px 16px;font-size:0.85rem;color:rgba(255,255,255,0.8);">${r.product != null ? r.product.name : 'Unknown Product'}</td>
                 <td style="padding:14px 16px;font-size:0.85rem;color:#FFD700;">
                   <c:forEach begin="1" end="${r.rating}">
                     <i class="fas fa-star"></i>
@@ -91,6 +94,7 @@
             </c:if>
           </tbody>
         </table>
+      </div>
       </div>
       </div>
     </form>

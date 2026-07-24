@@ -9,10 +9,14 @@
   <div style="flex:1;padding:32px;min-height:calc(100vh - 70px);">
 
     <!-- Page Header -->
-    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:32px;flex-wrap:wrap;gap:16px;">
+    <div style="position:sticky; top:0; z-index:98; background:rgba(13,13,20,0.85); backdrop-filter:blur(25px); -webkit-backdrop-filter:blur(25px); padding:24px 32px 16px 32px; margin:-32px -32px 24px -32px; border-bottom:1px solid rgba(255,255,255,0.04); box-shadow: 0 10px 40px rgba(0,0,0,0.3);">
+      <div class="admin-page-header" style="display:flex;justify-content:space-between;align-items:center;margin-bottom:16px;flex-wrap:wrap;gap:16px;">
       <div>
         <h2 style="font-weight:800;font-size:1.5rem;margin:0;">All <span class="text-gradient">Products</span></h2>
         <p style="color:rgba(255,255,255,1.0);font-size:0.85rem;margin:6px 0 0;">Manage your entire product catalogue</p>
+        <span style="font-size:0.82rem;color:rgba(255,255,255,0.7);display:inline-block;margin-top:8px;">
+          Showing <span id="visibleCount" style="color:#ff4500;font-weight:700;"></span> product(s)
+        </span>
       </div>
       <div style="display:flex;gap:10px;flex-wrap:wrap;">
         <div style="position:relative;">
@@ -23,21 +27,24 @@
           <i class="fas fa-plus"></i> Add Product
         </a>
       </div>
+      </div>
     </div>
 
     <!-- Products Table -->
-    <div style="background:rgba(255,255,255,0.02);border:1px solid rgba(255,255,255,0.06);border-radius:20px;overflow:hidden;">
-      <div style="overflow-x:auto;">
+    <div style="background:rgba(18,18,26,0.7);border:1px solid rgba(255,255,255,0.06);border-radius:24px;padding:28px;backdrop-filter:blur(25px);-webkit-backdrop-filter:blur(25px);box-shadow:0 15px 35px rgba(0,0,0,0.4);position:relative;overflow:hidden;">
+      <div style="position:absolute;top:-50px;right:-50px;width:200px;height:200px;background:rgba(255,69,0,0.08);border-radius:50%;filter:blur(40px);pointer-events:none;"></div>
+      <div style="position:relative;z-index:2;">
+      <div style="overflow-x:auto; overflow-y:auto; max-height:calc(100vh - 250px); padding-right:5px;">
         <table style="width:100%;border-collapse:collapse;" id="productTable">
-          <thead>
+          <thead style="box-shadow: 0 2px 5px rgba(0,0,0,0.5);">
             <tr style="background:rgba(255,69,0,0.06);border-bottom:1px solid rgba(255,69,0,0.1);">
-              <th style="padding:14px 16px;text-align:left;font-size:0.72rem;font-weight:700;text-transform:uppercase;letter-spacing:0.5px;color:rgba(255,255,255,1.0);">#</th>
-              <th style="padding:14px 16px;text-align:left;font-size:0.72rem;font-weight:700;text-transform:uppercase;letter-spacing:0.5px;color:rgba(255,255,255,1.0);">Image</th>
-              <th style="padding:14px 16px;text-align:left;font-size:0.72rem;font-weight:700;text-transform:uppercase;letter-spacing:0.5px;color:rgba(255,255,255,1.0);">Product Name</th>
-              <th style="padding:14px 16px;text-align:left;font-size:0.72rem;font-weight:700;text-transform:uppercase;letter-spacing:0.5px;color:rgba(255,255,255,1.0);">Category</th>
-              <th style="padding:14px 16px;text-align:left;font-size:0.72rem;font-weight:700;text-transform:uppercase;letter-spacing:0.5px;color:rgba(255,255,255,1.0);">Price</th>
-              <th style="padding:14px 16px;text-align:left;font-size:0.72rem;font-weight:700;text-transform:uppercase;letter-spacing:0.5px;color:rgba(255,255,255,1.0);">Status</th>
-              <th style="padding:14px 16px;text-align:center;font-size:0.72rem;font-weight:700;text-transform:uppercase;letter-spacing:0.5px;color:rgba(255,255,255,1.0);">Actions</th>
+              <th style="position: sticky; top: 0; background: #151515; z-index: 10; padding:14px 16px;text-align:left;font-size:0.72rem;font-weight:700;text-transform:uppercase;letter-spacing:0.5px;color:rgba(255,255,255,1.0);">#</th>
+              <th style="position: sticky; top: 0; background: #151515; z-index: 10; padding:14px 16px;text-align:left;font-size:0.72rem;font-weight:700;text-transform:uppercase;letter-spacing:0.5px;color:rgba(255,255,255,1.0);">Image</th>
+              <th style="position: sticky; top: 0; background: #151515; z-index: 10; padding:14px 16px;text-align:left;font-size:0.72rem;font-weight:700;text-transform:uppercase;letter-spacing:0.5px;color:rgba(255,255,255,1.0);">Product Name</th>
+              <th style="position: sticky; top: 0; background: #151515; z-index: 10; padding:14px 16px;text-align:left;font-size:0.72rem;font-weight:700;text-transform:uppercase;letter-spacing:0.5px;color:rgba(255,255,255,1.0);">Category</th>
+              <th style="position: sticky; top: 0; background: #151515; z-index: 10; padding:14px 16px;text-align:left;font-size:0.72rem;font-weight:700;text-transform:uppercase;letter-spacing:0.5px;color:rgba(255,255,255,1.0);">Price</th>
+              <th style="position: sticky; top: 0; background: #151515; z-index: 10; padding:14px 16px;text-align:left;font-size:0.72rem;font-weight:700;text-transform:uppercase;letter-spacing:0.5px;color:rgba(255,255,255,1.0);">Status</th>
+              <th style="position: sticky; top: 0; background: #151515; z-index: 10; padding:14px 16px;text-align:center;font-size:0.72rem;font-weight:700;text-transform:uppercase;letter-spacing:0.5px;color:rgba(255,255,255,1.0);">Actions</th>
             </tr>
           </thead>
           <tbody>
@@ -101,18 +108,8 @@
           </tbody>
         </table>
       </div>
-
-      <!-- Table Footer -->
-      <div style="padding:14px 16px;border-top:1px solid rgba(255,255,255,0.05);display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:10px;">
-        <span style="font-size:0.82rem;color:rgba(255,255,255,1.0);">
-          Showing <span id="visibleCount" style="color:#ff4500;font-weight:700;"></span> product(s)
-        </span>
-        <a href="${pageContext.request.contextPath}/addProduct" class="btn-primary-premium" style="padding:8px 20px;font-size:0.82rem;">
-          <i class="fas fa-plus"></i> Add New
-        </a>
       </div>
     </div>
-
   </div>
 </div>
 

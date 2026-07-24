@@ -1,5 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="jakarta.tags.core"%>
+<%@ taglib prefix="fn" uri="jakarta.tags.functions"%>
 
 <%@ include file="../common/header.jsp"%>
 
@@ -75,14 +76,28 @@
   .filter-select option { background: #12121a; }
 
   .product-card {
-    background: rgba(255,255,255,0.03);
-    border: 1px solid rgba(255,255,255,0.07);
-    border-radius: 20px;
+    background: rgba(18,18,26,0.7);
+    border: 1px solid rgba(255,255,255,0.06);
+    border-radius: 24px;
     overflow: hidden;
-    transition: all 0.4s ease;
+    transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
     height: 100%;
+    display: flex;
+    flex-direction: column;
+    backdrop-filter: blur(25px);
+    -webkit-backdrop-filter: blur(25px);
+    box-shadow: 0 10px 30px rgba(0,0,0,0.4);
     position: relative;
   }
+  .product-card::before {
+    content: ''; position: absolute; top: -30px; left: -30px; width: 100px; height: 100px;
+    background: rgba(255,94,0,0.15); border-radius: 50%; filter: blur(30px); pointer-events: none; z-index: 0; transition: all 0.4s ease;
+  }
+  .product-card:hover::before {
+    background: rgba(255,94,0,0.25);
+    transform: scale(1.2);
+  }
+  .product-card > * { position: relative; z-index: 2; }
 
   .product-card:hover {
     border-color: rgba(255,69,0,0.3);
@@ -353,16 +368,14 @@
                 <div class="product-footer">
                   <span class="product-price">₹${p.price}</span>
                   <c:if test="${p.available}">
-                    <form action="${pageContext.request.contextPath}/addToCart" method="post" style="margin:0;display:flex;gap:6px;">
-                      <button type="button" class="btn-add-cart" style="background:rgba(255,255,255,0.1);color:#fff;" onclick="openReviewModal(${p.id}, '${p.name}')" title="Rate Product">
+                    <div style="margin:0;display:flex;gap:6px;">
+                      <button type="button" class="btn-add-cart btn-rate-product" style="background:rgba(255,255,255,0.1);color:#fff;" data-product-id="${p.id}" data-product-name="${fn:escapeXml(p.name)}" title="Rate Product">
                         <i class="fas fa-star" style="color:#FFD700;"></i>
                       </button>
-                      <input type="hidden" name="productId" value="${p.id}">
-                      <input type="hidden" name="quantity" value="1">
-                      <button type="submit" class="btn-add-cart">
+                      <button type="button" class="btn-add-cart" onclick="addToCartAjax(this, ${p.id})">
                         <i class="fas fa-plus"></i> Add
                       </button>
-                    </form>
+                    </div>
                   </c:if>
                   <c:if test="${not p.available}">
                     <button class="btn-add-cart" style="background:linear-gradient(135deg,#6c757d,#495057);cursor:not-allowed;" disabled>
@@ -483,37 +496,53 @@ function filterProducts() {
 
 window.onload = function() {
   document.getElementById('resultCount').textContent = document.querySelectorAll('.product-item').length;
-  
-  // Star rating logic
+
+  // Star rating logic inside modal
   const stars = document.querySelectorAll('.rating-star');
   const ratingInput = document.getElementById('reviewRatingInput');
-  
   stars.forEach(star => {
     star.addEventListener('click', function() {
       const val = parseInt(this.getAttribute('data-val'));
       ratingInput.value = val;
       stars.forEach(s => {
         if(parseInt(s.getAttribute('data-val')) <= val) {
-          s.classList.remove('far');
-          s.classList.add('fas');
+          s.classList.remove('far'); s.classList.add('fas');
         } else {
-          s.classList.remove('fas');
-          s.classList.add('far');
+          s.classList.remove('fas'); s.classList.add('far');
         }
       });
     });
   });
+
+  // Attach star (rate) button listeners using data attributes (avoids apostrophe bug in product names)
+  document.querySelectorAll('.btn-rate-product').forEach(function(btn) {
+    btn.addEventListener('click', function(e) {
+      e.stopPropagation();
+      var pid = this.getAttribute('data-product-id');
+      var pname = this.getAttribute('data-product-name');
+      openReviewModal(pid, pname);
+    });
+  });
 };
 
+
 function openReviewModal(productId, productName) {
-  <c:if test="${empty sessionScope.user}">
+  var isLoggedIn = '${not empty sessionScope.user}' === 'true';
+  if (!isLoggedIn) {
     alert("Please login first to rate food!");
     window.location.href = "${pageContext.request.contextPath}/login";
     return;
-  </c:if>
+  }
+  // Reset stars
+  document.getElementById('reviewRatingInput').value = "0";
+  document.querySelectorAll('.rating-star').forEach(s => {
+    s.classList.remove('fas');
+    s.classList.add('far');
+  });
   document.getElementById('reviewProductId').value = productId;
   document.getElementById('reviewProductName').innerText = productName;
   document.getElementById('reviewModal').style.display = 'flex';
+  document.body.style.overflow = 'hidden';
 }
 
 function closeReviewModal() {

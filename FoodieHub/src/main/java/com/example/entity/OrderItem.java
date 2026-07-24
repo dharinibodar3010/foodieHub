@@ -6,6 +6,7 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 @Entity
 @Table(name = "order_item")
@@ -20,6 +21,7 @@ public class OrderItem {
 	private double price;
 
 	@ManyToOne
+	@JsonIgnore
 	private Order order;
 
 	@ManyToOne

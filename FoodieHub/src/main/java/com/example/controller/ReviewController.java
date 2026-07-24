@@ -10,6 +10,7 @@ import com.example.entity.Review;
 import com.example.entity.User;
 import com.example.entity.Product;
 import com.example.repository.ReviewRepository;
+import com.example.repository.UserRepository;
 import com.example.service.ProductService;
 
 @Controller
@@ -21,6 +22,9 @@ public class ReviewController {
     @Autowired
     private ProductService productService;
 
+    @Autowired
+    private UserRepository userRepository;
+
     @PostMapping("/addReview")
     public String addReview(@RequestParam Long productId, @RequestParam int rating, @RequestParam String comment, HttpSession session) {
         User user = (User) session.getAttribute("user");
@@ -28,12 +32,15 @@ public class ReviewController {
             return "redirect:/login";
         }
 
-        Product product = productService.getProductById(productId);
-        if (product != null) {
-            Review review = new Review(user, product, rating, comment);
-            reviewRepository.save(review);
+        if (!productService.productExists(productId)) {
+            return "redirect:/products";
         }
-        
+
+        Product product = productService.getProductReference(productId);
+        User userRef = userRepository.getReferenceById(user.getId());
+        Review review = new Review(userRef, product, rating, comment);
+        reviewRepository.save(review);
+
         return "redirect:/products";
     }
 
@@ -42,7 +49,7 @@ public class ReviewController {
         if (session.getAttribute("admin") == null) {
             return "redirect:/admin";
         }
-        model.addAttribute("list", reviewRepository.findAll());
+        model.addAttribute("list", reviewRepository.findAllWithUserAndProduct());
         return "admin/reviews";
     }
 

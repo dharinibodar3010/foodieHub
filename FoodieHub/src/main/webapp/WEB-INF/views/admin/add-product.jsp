@@ -9,7 +9,8 @@
   <div style="flex:1;padding:32px;min-height:calc(100vh - 70px);">
 
     <!-- Page Header -->
-    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:32px;flex-wrap:wrap;gap:16px;">
+    <div style="position:sticky; top:0; z-index:98; background:rgba(13,13,20,0.85); backdrop-filter:blur(25px); -webkit-backdrop-filter:blur(25px); padding:24px 32px 16px 32px; margin:-32px -32px 24px -32px; border-bottom:1px solid rgba(255,255,255,0.04); box-shadow: 0 10px 40px rgba(0,0,0,0.3);">
+      <div class="admin-page-header" style="display:flex;justify-content:space-between;align-items:center;margin-bottom:16px;flex-wrap:wrap;gap:16px;">
       <div>
         <div style="font-size:0.72rem;color:rgba(255,255,255,1.0);font-weight:700;text-transform:uppercase;letter-spacing:1.5px;margin-bottom:8px;">Admin Panel</div>
         <h2 style="font-weight:800;font-size:1.5rem;margin:0;">Add New <span class="text-gradient">Product</span></h2>
@@ -17,12 +18,15 @@
       <a href="${pageContext.request.contextPath}/viewProducts" class="btn-outline-premium">
         <i class="fas fa-arrow-left"></i> Back to Products
       </a>
+      </div>
     </div>
 
     <!-- Form Card -->
-    <div style="background:rgba(255,255,255,0.02);border:1px solid rgba(255,255,255,0.06);border-radius:24px;padding:36px;max-width:780px;">
+    <div style="background:rgba(18,18,26,0.7);border:1px solid rgba(255,255,255,0.06);border-radius:24px;padding:36px;backdrop-filter:blur(25px);-webkit-backdrop-filter:blur(25px);box-shadow:0 15px 35px rgba(0,0,0,0.4);position:relative;overflow:hidden;max-width:780px;">
+      <div style="position:absolute;top:-50px;right:-50px;width:200px;height:200px;background:rgba(255,69,0,0.08);border-radius:50%;filter:blur(40px);pointer-events:none;"></div>
+      <div style="position:relative;z-index:2;">
 
-      <form action="${pageContext.request.contextPath}/saveProduct" method="post" enctype="multipart/form-data">
+      <form id="addProductForm" enctype="multipart/form-data">
 
         <div class="row g-4">
 
@@ -47,7 +51,7 @@
           <!-- Category -->
           <div class="col-md-6">
             <label class="form-label-premium">Category *</label>
-            <select name="category.id" class="form-premium w-100" required>
+            <select name="categoryId" class="form-premium w-100" required>
               <option value="">-- Select Category --</option>
               <c:if test="${not empty categories}">
                 <c:forEach var="cat" items="${categories}">
@@ -100,7 +104,7 @@
           <!-- Submit Buttons -->
           <div class="col-12">
             <div style="display:flex;gap:12px;flex-wrap:wrap;">
-              <button type="submit" class="btn-primary-premium" style="padding:13px 32px;">
+              <button type="submit" id="saveBtn" class="btn-primary-premium" style="padding:13px 32px;">
                 <i class="fas fa-save"></i> Save Product
               </button>
               <a href="${pageContext.request.contextPath}/viewProducts" class="btn-outline-premium" style="padding:12px 24px;">
@@ -111,8 +115,8 @@
 
         </div>
       </form>
+      </div>
     </div>
-
   </div>
 </div>
 
@@ -130,6 +134,34 @@ function previewImage(input) {
     reader.readAsDataURL(input.files[0]);
   }
 }
+
+document.getElementById('addProductForm').addEventListener('submit', function(e) {
+  e.preventDefault();
+  const btn = document.getElementById('saveBtn');
+  btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Saving...';
+  btn.disabled = true;
+
+  const formData = new FormData(this);
+
+  fetch('${pageContext.request.contextPath}/saveProduct', {
+    method: 'POST',
+    body: formData
+  }).then(response => response.text())
+  .then(result => {
+    if (result === 'success') {
+      window.location.href = '${pageContext.request.contextPath}/viewProducts';
+    } else {
+      alert('❌ Failed to add product. Please try again.');
+      btn.innerHTML = '<i class="fas fa-save"></i> Save Product';
+      btn.disabled = false;
+    }
+  }).catch(err => {
+    console.error(err);
+    alert('❌ An error occurred.');
+    btn.innerHTML = '<i class="fas fa-save"></i> Save Product';
+    btn.disabled = false;
+  });
+});
 </script>
 
 <%@ include file="../common/footer.jsp"%>
