@@ -41,7 +41,7 @@
             <p style="color:rgba(255,255,255,0.45);font-size:0.88rem;">Join FoodieHub and start ordering delicious food!</p>
           </div>
 
-          <form action="${pageContext.request.contextPath}/register" method="post">
+          <form action="${pageContext.request.contextPath}/register" method="post" onsubmit="return validateRegisterForm()">
 
             <div class="row g-3">
 
@@ -81,10 +81,13 @@
                 <label class="form-label-premium">Password</label>
                 <div style="position:relative;">
                   <i class="fas fa-lock" style="position:absolute;left:16px;top:50%;transform:translateY(-50%);color:rgba(255,255,255,0.35);font-size:0.9rem;z-index:2;"></i>
-                  <input type="password" name="password" id="regPass" class="form-premium w-100" style="padding-left:44px !important;" placeholder="Min 8 characters" required>
+                  <input type="password" name="password" id="regPass" class="form-premium w-100" style="padding-left:44px !important;" placeholder="Min 8 characters" pattern="^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[^A-Za-z0-9]).{8,}$" minlength="8" title="Password must be at least 8 characters long, and contain at least one uppercase letter, one lowercase letter, one number, and one special character." required>
                   <button type="button" onclick="togglePass2('regPass', this)" style="position:absolute;right:14px;top:50%;transform:translateY(-50%);background:none;border:none;color:rgba(255,255,255,0.35);cursor:pointer;font-size:0.9rem;z-index:2;">
                     <i class="fas fa-eye"></i>
                   </button>
+                </div>
+                <div id="passError" style="display:none; color:#dc3545; font-size:0.75rem; margin-top:8px;">
+                  Password must be at least 8 characters with uppercase, lowercase, number and special character
                 </div>
               </div>
 
@@ -100,9 +103,9 @@
               </div>
 
               <div class="col-12">
-                <label style="display:flex;align-items:flex-start;gap:10px;cursor:pointer;color:rgba(255,255,255,0.55);font-size:0.85rem;">
-                  <input type="checkbox" required style="accent-color:#ff4500;margin-top:3px;">
-                  I agree to FoodieHub's <a href="#" style="color:#ff4500;text-decoration:none;">Terms of Service</a> and <a href="#" style="color:#ff4500;text-decoration:none;">Privacy Policy</a>
+                <label style="display:flex;align-items:flex-start;gap:10px;cursor:pointer;color:rgba(255,255,255,0.55);font-size:0.85rem;line-height:1.4;">
+                  <input type="checkbox" required style="accent-color:#ff4500;margin-top:3px;flex-shrink:0;">
+                  <span>I agree to FoodieHub's <a href="#" style="color:#ff4500;text-decoration:none;">Terms of Service</a> and <a href="#" style="color:#ff4500;text-decoration:none;">Privacy Policy</a></span>
                 </label>
               </div>
 
@@ -138,6 +141,22 @@
 </div>
 
 <script>
+function validateRegisterForm() {
+  const pass = document.getElementById('regPass').value;
+  const confirm = document.getElementById('confirmPass').value;
+  const regex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[^A-Za-z0-9]).{8,}$/;
+  if (!regex.test(pass)) {
+    document.getElementById('passError').style.display = 'block';
+    document.getElementById('regPass').style.borderColor = '#dc3545';
+    return false;
+  }
+  if (pass !== confirm) {
+    alert("Passwords do not match!");
+    return false;
+  }
+  return true;
+}
+
 function togglePass2(fieldId, btn) {
   const field = document.getElementById(fieldId);
   const icon = btn.querySelector('i');
@@ -157,6 +176,15 @@ document.getElementById('regPass').addEventListener('input', function() {
   const val = this.value;
   const indicator = document.getElementById('strengthIndicator');
   indicator.style.display = val.length > 0 ? 'block' : 'none';
+
+  const regex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[^A-Za-z0-9]).{8,}$/;
+  if (val.length > 0 && !regex.test(val)) {
+    document.getElementById('passError').style.display = 'block';
+    this.style.borderColor = '#dc3545';
+  } else {
+    document.getElementById('passError').style.display = 'none';
+    this.style.borderColor = '';
+  }
 
   let strength = 0;
   if (val.length >= 8) strength++;

@@ -24,10 +24,12 @@ public class Product {
 
 	private String name;
 
+	@jakarta.persistence.Column(columnDefinition = "TEXT")
 	private String description;
 
 	private double price;
 
+	@jakarta.persistence.Column(columnDefinition = "TEXT")
 	private String image;
 
 	private boolean available;

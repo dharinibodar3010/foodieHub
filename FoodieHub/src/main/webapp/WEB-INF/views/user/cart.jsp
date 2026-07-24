@@ -62,6 +62,7 @@
         </div>
 
         <!-- Coupon -->
+        <c:if test="${empty sessionScope.user or not sessionScope.user.usedWelcomeCoupon}">
         <div style="background:rgba(18,18,26,0.7);backdrop-filter:blur(25px);-webkit-backdrop-filter:blur(25px);box-shadow:0 15px 35px rgba(0,0,0,0.4);border:1px solid rgba(255,255,255,0.06);border-radius:24px;padding:20px;margin-top:20px;position:relative;overflow:hidden;">
           <div style="position:absolute;bottom:-40px;right:-40px;width:150px;height:150px;background:rgba(99,102,241,0.08);border-radius:50%;filter:blur(40px);pointer-events:none;z-index:0;"></div>
           <div style="position:relative;z-index:2;">
@@ -87,6 +88,7 @@
           </div>
           </div>
         </div>
+        </c:if>
 
       </div>
 
@@ -220,8 +222,15 @@ function selectCoupon(code) {
 }
 
 function applyCoupon() {
-  const code = document.getElementById('couponInput').value.trim().toUpperCase();
+  const code = document.getElementById('couponInput') ? document.getElementById('couponInput').value.trim().toUpperCase() : '';
+  const usedWelcomeCoupon = '${not empty sessionScope.user ? sessionScope.user.usedWelcomeCoupon : "false"}' === 'true';
+
   if (code === 'FOODIE50') {
+    if (usedWelcomeCoupon) {
+      document.getElementById('couponInput').style.borderColor = '#dc3545';
+      showCartToast('❌ You have already used this welcome coupon.');
+      return;
+    }
     if (!discountApplied) {
       discountApplied = true;
       updateSummary();

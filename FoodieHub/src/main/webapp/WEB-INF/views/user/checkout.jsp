@@ -348,6 +348,9 @@
             <input type="hidden" name="address" id="formAddress" value="Standard Address">
             <input type="hidden" name="deliveryTime" id="formDeliveryTime" value="30 mins">
             <input type="hidden" name="totalAmount" id="totalAmountInput" value="${totalAmount}">
+            <c:if test="${not empty appliedCoupon}">
+              <input type="hidden" name="appliedCoupon" value="${appliedCoupon}">
+            </c:if>
           </form>
 
           <p style="text-align:center;font-size:0.75rem;color:rgba(255,255,255,0.3);margin-top:12px;">

@@ -32,6 +32,9 @@ public class PaymentController {
 	@Autowired
 	private CartService cartService;
 
+	@Autowired
+	private com.example.service.UserService userService;
+
 	@Value("${razorpay.api.key}")
 	private String razorpayApiKey;
 
@@ -88,6 +91,14 @@ public class PaymentController {
 		List<Cart> cartItems = cartService.getUserCart(user.getId());
 		if (!cartItems.isEmpty()) {
 			cartService.deleteAllCarts(cartItems);
+		}
+
+		String pendingCoupon = (String) session.getAttribute("pendingCoupon_" + orderId);
+		if ("FOODIE50".equals(pendingCoupon)) {
+			com.example.entity.User existingUser = (com.example.entity.User) session.getAttribute("user");
+			existingUser.setUsedWelcomeCoupon(true);
+			userService.saveUser(existingUser);
+			session.removeAttribute("pendingCoupon_" + orderId);
 		}
 
 		model.addAttribute("paymentMode", paymentMode);

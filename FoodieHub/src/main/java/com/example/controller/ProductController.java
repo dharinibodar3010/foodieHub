@@ -17,6 +17,20 @@ public class ProductController {
 	@Autowired
 	private com.example.repository.CategoryRepository categoryRepository;
 
+	@Autowired
+	private org.springframework.jdbc.core.JdbcTemplate jdbcTemplate;
+
+	@jakarta.annotation.PostConstruct
+	public void fixImageColumn() {
+		try {
+			jdbcTemplate.execute("ALTER TABLE products MODIFY image TEXT");
+			jdbcTemplate.execute("ALTER TABLE products MODIFY description TEXT");
+			System.out.println("✅ Fixed 'image' and 'description' columns to TEXT in DB.");
+		} catch (Exception e) {
+			System.out.println("⚠️ Could not alter column: " + e.getMessage());
+		}
+	}
+
 	@GetMapping("/products")
 	public String products(Model model) {
 		model.addAttribute("products", productService.getAllProducts());

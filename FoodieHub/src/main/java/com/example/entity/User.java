@@ -30,6 +30,9 @@ public class User {
 
 	private String gender;
 
+	@jakarta.persistence.Column(columnDefinition = "boolean default false")
+	private boolean usedWelcomeCoupon = false;
+
 	// Default Constructor
 	public User() {
 
@@ -118,6 +121,14 @@ public class User {
 
 	public void setGender(String gender) {
 		this.gender = gender;
+	}
+
+	public boolean isUsedWelcomeCoupon() {
+		return usedWelcomeCoupon;
+	}
+
+	public void setUsedWelcomeCoupon(boolean usedWelcomeCoupon) {
+		this.usedWelcomeCoupon = usedWelcomeCoupon;
 	}
 
 }

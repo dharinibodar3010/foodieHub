@@ -110,7 +110,8 @@
 
   .product-card-img-wrap {
     position: relative;
-    height: 200px;
+    aspect-ratio: 4 / 3;
+    height: auto;
     overflow: hidden;
   }
 

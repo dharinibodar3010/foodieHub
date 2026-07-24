@@ -7,12 +7,17 @@
       🍕 Foodie<span>Hub</span>
     </a>
 
-    <button class="navbar-toggler" style="border-color:rgba(255,69,0,0.5)" data-bs-toggle="collapse" data-bs-target="#navMenu">
+    <button class="navbar-toggler" style="border-color:rgba(255,69,0,0.5)" data-bs-toggle="offcanvas" data-bs-target="#navMenu">
       <span style="color:#ff4500"><i class="fas fa-bars"></i></span>
     </button>
 
-    <div class="collapse navbar-collapse" id="navMenu">
-      <ul class="navbar-nav ms-auto align-items-start align-items-lg-center gap-3 gap-lg-1 mt-3 mt-lg-0 text-start">
+    <div class="offcanvas offcanvas-start mobile-offcanvas" tabindex="-1" id="navMenu" aria-labelledby="navMenuLabel">
+      <div class="offcanvas-header border-bottom border-secondary border-opacity-25">
+        <h5 class="offcanvas-title" id="navMenuLabel" style="font-weight: 800; background: var(--gradient-main); -webkit-background-clip: text; -webkit-text-fill-color: transparent;">🍕 FoodieHub</h5>
+        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+      </div>
+      <div class="offcanvas-body">
+        <ul class="navbar-nav ms-auto align-items-lg-center gap-3 gap-lg-1 text-start">
 
         <li class="nav-item">
           <a class="nav-link-premium" href="${pageContext.request.contextPath}/">
@@ -80,12 +85,10 @@
                 <i class="fas fa-sign-in-alt me-1"></i> Login
               </a>
             </li>
-          </c:otherwise>
-        </c:choose>
+          </c:otherwise>        </c:choose>
 
-
-
-      </ul>
+        </ul>
+      </div>
     </div>
   </div>
 </nav>

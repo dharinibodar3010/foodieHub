@@ -59,6 +59,9 @@ public class OrderController {
 		model.addAttribute("discount", discount);
 		model.addAttribute("totalAmount", totalAmount + tax - discount);
 		model.addAttribute("razorpayKey", razorpayApiKey);
+		if ("FOODIE50".equalsIgnoreCase(coupon)) {
+			model.addAttribute("appliedCoupon", "FOODIE50");
+		}
 		
 		return "user/checkout";
 	}
@@ -67,7 +70,7 @@ public class OrderController {
 	private com.example.repository.OrderItemRepository orderItemRepository;
 
 	@PostMapping("/place-order")
-	public String placeOrder(@RequestParam double totalAmount, @RequestParam String address, @RequestParam String deliveryTime, HttpSession session, Model model) {
+	public String placeOrder(@RequestParam double totalAmount, @RequestParam String address, @RequestParam String deliveryTime, @RequestParam(required = false) String appliedCoupon, HttpSession session, Model model) {
 		User user = (User) session.getAttribute("user");
 		if (user == null) return "redirect:/login";
 
@@ -102,6 +105,10 @@ public class OrderController {
 			orderItem.setQuantity(cart.getQuantity());
 			orderItem.setPrice(cart.getProduct().getPrice());
 			orderItemRepository.save(orderItem);
+		}
+
+		if ("FOODIE50".equals(appliedCoupon)) {
+			session.setAttribute("pendingCoupon_" + order.getId(), appliedCoupon);
 		}
 
 		// ✅ Do NOT clear cart here — clear only after successful payment

@@ -72,9 +72,27 @@
     border: 1px solid rgba(23,108,232,0.3); color: #4b9aff;
     font-size: 0.72rem; font-weight: 700; padding: 3px 10px; border-radius: 6px;
   }
+  .test-mode-ribbon {
+    position: fixed;
+    top: 30px;
+    right: -40px;
+    background: #dc3545;
+    color: white;
+    padding: 8px 50px;
+    transform: rotate(45deg);
+    font-weight: 700;
+    font-size: 0.9rem;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+    z-index: 99999;
+    letter-spacing: 1px;
+    pointer-events: none;
+  }
 </style>
 
 <div class="payment-page">
+  <!-- Test Mode Ribbon -->
+  <div class="test-mode-ribbon">Test Mode</div>
+
   <div class="container">
     <form id="paymentForm" action="${pageContext.request.contextPath}/process-payment" method="post" style="display:none;">
       <input type="hidden" name="orderId" value="${order.id}">

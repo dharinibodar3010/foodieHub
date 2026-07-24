@@ -489,7 +489,8 @@
     position: relative;
     overflow: hidden;
     border-radius: var(--radius-md) var(--radius-md) 0 0;
-    height: 220px; /* Restored fixed height to fix grid */
+    aspect-ratio: 4 / 3;
+    height: auto;
   }
 
   .product-img-wrapper img {
@@ -668,7 +669,48 @@
     100% { background-position: -200% 0; }
   }
 
-  /* Smooth page fade-in (Removed) */
+  /* === MOBILE RESPONSIVE TWEAKS === */
+  @media (max-width: 991px) {
+    .nav-link-premium::after { display: none !important; }
+    .offcanvas-body .nav-link-premium { padding: 12px 16px !important; margin-bottom: 8px; font-size: 1.1rem; border-radius: 8px; }
+    .section-title { font-size: 1.7rem; }
+    .checkout-page, .payment-page { padding: 30px 0 60px; }
+    .card-premium, .stat-card, .checkout-card { padding: 20px; }
+    .admin-page-header { padding: 16px 20px !important; margin: -32px -32px 20px -32px !important; }
+    .admin-sidebar { position: static; min-height: auto; padding: 10px 0; border-bottom: 1px solid var(--dark-border); }
+    .auth-card { padding: 24px 20px; }
+    /* Fix excessive spacing on mobile in admin forms */
+    div[style*="flex:1;padding:32px;"] { padding: 16px !important; }
+    .mobile-offcanvas {
+      background: rgba(18,18,26,0.95) !important;
+      backdrop-filter: blur(20px) !important;
+      border-right: 1px solid rgba(255,255,255,0.1) !important;
+    }
+    .mobile-offcanvas .offcanvas-body::-webkit-scrollbar {
+      display: none !important;
+    }
+    .mobile-offcanvas .offcanvas-body {
+      -ms-overflow-style: none !important;
+      scrollbar-width: none !important;
+      padding: 24px !important;
+    }
+    .mobile-offcanvas .navbar-nav {
+      gap: 16px !important;
+      width: 100%;
+    }
+    .mobile-offcanvas .nav-item {
+      width: 100%;
+      text-align: left;
+    }
+    .mobile-offcanvas .nav-link-premium {
+      display: flex;
+      align-items: center;
+      padding: 12px 16px !important;
+      background: rgba(255,255,255,0.03);
+      border-radius: 12px;
+      font-size: 1.05rem;
+    }
+  }
 </style>
 </head>
 <body>
