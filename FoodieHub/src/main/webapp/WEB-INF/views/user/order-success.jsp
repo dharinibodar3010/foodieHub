@@ -303,10 +303,10 @@
       <!-- Action Buttons -->
       <div class="d-flex gap-3 justify-content-center flex-wrap">
         <a href="${pageContext.request.contextPath}/orders" class="btn-primary-premium" style="padding:12px 28px;">
-          <i class="fas fa-box"></i> Track Orders
+          <i class="fas fa-box"></i> Track Order
         </a>
-        <a href="${pageContext.request.contextPath}/products" class="btn-outline-premium" style="padding:11px 24px;">
-          <i class="fas fa-utensils"></i> Order More
+        <a href="${pageContext.request.contextPath}/orders" class="btn-outline-premium" style="padding:11px 24px;">
+          <i class="fas fa-list"></i> My Orders
         </a>
       </div>
 

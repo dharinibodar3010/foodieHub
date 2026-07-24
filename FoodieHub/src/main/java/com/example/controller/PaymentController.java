@@ -86,8 +86,8 @@ public class PaymentController {
 
 		// Clear cart ONLY after successful payment
 		List<Cart> cartItems = cartService.getUserCart(user.getId());
-		for (Cart cart : cartItems) {
-			cartService.deleteCart(cart.getId());
+		if (!cartItems.isEmpty()) {
+			cartService.deleteAllCarts(cartItems);
 		}
 
 		model.addAttribute("paymentMode", paymentMode);

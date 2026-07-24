@@ -43,10 +43,12 @@ public class CartService {
 
 	// Remove Cart Item
 
-	public void deleteCart(Long id) {
+	public void deleteCart(Long cartId) {
+		cartRepository.deleteById(cartId);
+	}
 
-		cartRepository.deleteById(id);
-
+	public void deleteAllCarts(List<Cart> carts) {
+		cartRepository.deleteAllInBatch(carts);
 	}
 
 }

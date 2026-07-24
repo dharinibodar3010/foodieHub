@@ -57,7 +57,7 @@
                 <label class="form-label-premium">Mobile Number</label>
                 <div style="position:relative;">
                   <i class="fas fa-phone" style="position:absolute;left:16px;top:50%;transform:translateY(-50%);color:rgba(255,255,255,0.35);font-size:0.9rem;z-index:2;"></i>
-                  <input type="tel" name="mobile" class="form-premium w-100" style="padding-left:44px !important;" placeholder="+91 XXXXX XXXXX" required>
+                  <input type="tel" name="mobile" class="form-premium w-100" style="padding-left:44px !important;" placeholder="10-digit number" pattern="[0-9]{10}" maxlength="10" minlength="10" oninput="this.value = this.value.replace(/[^0-9]/g, '')" required>
                 </div>
               </div>
 
