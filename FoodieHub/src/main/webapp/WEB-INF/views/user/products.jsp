@@ -5,12 +5,12 @@
 <%@ include file="../common/header.jsp"%>
 
 <style>
-  .products-page { padding: 60px 0 80px; }
+  .products-page { padding: 20px 0 20px; }
 
   .page-hero {
-    padding: 60px 0 40px;
+    padding: 30px 0 20px;
     background: linear-gradient(135deg, rgba(255,69,0,0.08) 0%, transparent 60%);
-    margin-bottom: 40px;
+    margin-bottom: 15px;
     border-bottom: 1px solid rgba(255,69,0,0.1);
   }
 
@@ -18,8 +18,8 @@
     background: rgba(255,255,255,0.03);
     border: 1px solid rgba(255,255,255,0.07);
     border-radius: 16px;
-    padding: 20px 24px;
-    margin-bottom: 40px;
+    padding: 16px 20px;
+    margin-bottom: 20px;
     display: flex;
     align-items: center;
     gap: 16px;
@@ -256,27 +256,34 @@
 
   /* ===== MOBILE RESPONSIVE ===== */
   @media (max-width: 768px) {
-    .page-hero { padding: 30px 0 20px; }
-    .page-hero .d-flex { flex-direction: column; align-items: flex-start !important; gap: 12px; }
-    .products-page { padding: 20px 0 60px; }
+    .page-hero { padding: 15px 0 10px; margin-bottom: 20px; }
+    .page-hero .d-flex { flex-direction: column; align-items: flex-start !important; gap: 8px; }
+    .products-page { padding: 10px 0 40px; }
     .filter-bar {
       flex-direction: column;
       align-items: stretch;
-      gap: 12px;
-      padding: 14px 16px;
+      gap: 10px;
+      padding: 12px;
+      margin-bottom: 20px;
     }
     .search-input-wrap { min-width: 100%; }
     .filter-select { width: 100%; min-width: 100%; }
-    .product-body { padding: 14px; }
-    .product-name { font-size: 0.92rem; }
-    .product-price { font-size: 1.1rem; }
-    .btn-add-cart { padding: 8px 14px; font-size: 0.78rem; }
-    /* 2 columns on mobile */
-    .col-lg-4.col-md-6 { flex: 0 0 50%; max-width: 50%; }
-  }
-  @media (max-width: 480px) {
-    /* 1 column on very small screens */
-    .col-lg-4.col-md-6 { flex: 0 0 100%; max-width: 100%; }
+    .product-body { padding: 10px; }
+    .product-name { font-size: 0.85rem; margin-bottom: 2px; }
+    .product-price { font-size: 1rem; }
+    .product-desc { font-size: 0.75rem; margin-bottom: 10px; }
+    .btn-add-cart { padding: 6px 10px; font-size: 0.7rem; }
+    .product-fav { width: 28px; height: 28px; }
+    /* 2 columns on mobile handled by col-6 class */
+    .row.g-4 { 
+      --bs-gutter-x: 12px;
+      --bs-gutter-y: 16px;
+    }
+    .product-card-img-wrap {
+      aspect-ratio: auto;
+      height: 140px;
+    }
+    .results-count { margin-top: -10px; margin-bottom: 15px; font-size: 0.8rem; }
   }
 </style>
 
@@ -356,7 +363,7 @@
     <c:when test="${not empty products}">
       <div class="row g-4" id="productsGrid">
         <c:forEach var="p" items="${products}">
-          <div class="col-lg-3 col-md-4 col-sm-6 product-item"
+          <div class="col-lg-3 col-md-4 col-6 product-item"
                data-name="${p.name}"
                data-price="${p.price}"
                data-category="${p.category != null ? p.category.name : ''}">

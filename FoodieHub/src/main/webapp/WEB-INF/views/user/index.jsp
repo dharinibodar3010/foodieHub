@@ -125,7 +125,7 @@
 
   .feature-card {
     background: rgba(255,255,255,0.03);
-    border: 1px solid rgba(255,255,255,0.07);
+    border: 1px solid rgba(255,69,0,0.25); /* Made border more visible with an orange tint */
     border-radius: 20px;
     padding: 32px 24px;
     transition: all 0.4s ease;
@@ -202,6 +202,109 @@
     font-size: 8rem;
     opacity: 0.12;
   }
+
+  /* ===== MOBILE RESPONSIVE ===== */
+  @media (max-width: 768px) {
+    .hero-stats {
+      flex-wrap: nowrap;
+      gap: 5px;
+      justify-content: space-between;
+      margin-top: 25px;
+    }
+    .hero-stat-num {
+      font-size: 1.05rem;
+    }
+    .hero-stat-label {
+      font-size: 0.6rem;
+    }
+    .hero-food-img {
+      height: 220px;
+      border-radius: 12px;
+    }
+    .hero-floating-badge {
+      padding: 6px 10px;
+      gap: 6px;
+    }
+    .hero-floating-badge.badge-1 { top: 15px; left: -5px; }
+    .hero-floating-badge.badge-2 { bottom: 30px; right: -5px; }
+    
+    .hero-floating-badge > div:first-child {
+      width: 24px !important;
+      height: 24px !important;
+      font-size: 0.7rem;
+    }
+    .hero-floating-badge div[style*="font-weight:700"] {
+      font-size: 0.7rem !important;
+    }
+    .hero-floating-badge div[style*="font-size:0.72rem"] {
+      font-size: 0.55rem !important;
+    }
+    
+    /* Feature Cards Mobile */
+    .feature-card {
+      padding: 16px 10px;
+      border-radius: 14px;
+    }
+    .feature-icon {
+      width: 44px;
+      height: 44px;
+      font-size: 1.4rem;
+      margin-bottom: 12px;
+      border-radius: 12px;
+    }
+    .feature-card h5 {
+      font-size: 0.85rem !important;
+      margin-bottom: 6px !important;
+    }
+    .feature-card p {
+      font-size: 0.65rem !important;
+      line-height: 1.4 !important;
+    }
+
+    /* Section Padding Adjustments */
+    .hero-section { padding: 20px 0; min-height: auto; margin-top: 20px; }
+    .features-section { padding: 20px 0; }
+    .categories-section { padding: 20px 0; }
+    
+    /* Category Scroll Mobile */
+    .category-scroll-container {
+      flex-wrap: nowrap !important;
+      overflow-x: auto;
+      padding-bottom: 10px;
+      -ms-overflow-style: none;
+      scrollbar-width: none;
+    }
+    .category-scroll-container::-webkit-scrollbar { display: none; }
+    .category-scroll-container .category-pill { flex-shrink: 0; font-size: 0.8rem; padding: 8px 16px; }
+
+    /* Product Cards Mobile */
+    .card-premium { border-radius: 14px; }
+    .card-premium > div:last-child { padding: 16px !important; }
+    .card-premium h6 { font-size: 0.95rem !important; margin-bottom: 6px !important; }
+    .card-premium p { display: -webkit-box !important; font-size: 0.8rem !important; margin-bottom: 12px !important; } 
+    .card-premium .price-tag { font-size: 1.1rem !important; }
+    .card-premium .btn-primary-premium { padding: 8px 16px !important; font-size: 0.8rem !important; }
+
+    .product-scroll-container { gap: 16px; padding-bottom: 15px; }
+    .product-scroll-item { flex: 0 0 240px; }
+  }
+
+  /* Product Scroll (Global) */
+  .product-scroll-container {
+    display: flex;
+    gap: 24px;
+    overflow-x: auto;
+    padding-bottom: 20px;
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+    scroll-snap-type: x mandatory;
+  }
+  .product-scroll-container::-webkit-scrollbar { display: none; }
+  .product-scroll-item {
+    flex: 0 0 230px; /* Reduced width to fit 5 products in a row on laptop */
+    scroll-snap-align: start;
+  }
+  .product-scroll-item .card-premium { height: 100%; }
 </style>
 
 <!-- ===== HERO SECTION ===== -->
@@ -259,7 +362,7 @@
         </div>
       </div>
 
-      <div class="col-lg-6 d-none d-lg-block animate__animated animate__fadeInRight">
+      <div class="col-lg-6 animate__animated animate__fadeInRight mt-5 mt-lg-0">
         <div class="hero-food-card" style="position:relative;">
           
           <!-- Bootstrap Carousel Slider -->
@@ -312,8 +415,8 @@
       <p class="section-subtitle mt-3">We make every meal experience special</p>
     </div>
 
-    <div class="row g-4">
-      <div class="col-lg-3 col-md-6">
+    <div class="row g-3 g-md-4">
+      <div class="col-lg-3 col-md-6 col-6">
         <div class="feature-card text-center">
           <div class="feature-icon mx-auto">⚡</div>
           <h5 style="font-weight:700; margin-bottom:12px;">Lightning Fast</h5>
@@ -322,7 +425,7 @@
           </p>
         </div>
       </div>
-      <div class="col-lg-3 col-md-6">
+      <div class="col-lg-3 col-md-6 col-6">
         <div class="feature-card text-center">
           <div class="feature-icon mx-auto">🌿</div>
           <h5 style="font-weight:700; margin-bottom:12px;">Fresh Ingredients</h5>
@@ -331,7 +434,7 @@
           </p>
         </div>
       </div>
-      <div class="col-lg-3 col-md-6">
+      <div class="col-lg-3 col-md-6 col-6">
         <div class="feature-card text-center">
           <div class="feature-icon mx-auto">🔒</div>
           <h5 style="font-weight:700; margin-bottom:12px;">Secure Payments</h5>
@@ -340,7 +443,7 @@
           </p>
         </div>
       </div>
-      <div class="col-lg-3 col-md-6">
+      <div class="col-lg-3 col-md-6 col-6">
         <div class="feature-card text-center">
           <div class="feature-icon mx-auto">🎯</div>
           <h5 style="font-weight:700; margin-bottom:12px;">Live Tracking</h5>
@@ -356,14 +459,14 @@
 <!-- ===== CATEGORIES SECTION ===== -->
 <section class="categories-section">
   <div class="container">
-    <div class="d-flex justify-content-between align-items-center mb-5 flex-wrap gap-3">
+    <div class="d-flex justify-content-between align-items-center mb-4 flex-wrap gap-3">
       <h2 class="section-title">Browse by <span>Category</span></h2>
       <a href="${pageContext.request.contextPath}/products" class="btn-outline-premium">
         View All <i class="fas fa-arrow-right ms-1"></i>
       </a>
     </div>
 
-    <div class="d-flex gap-3 flex-wrap mb-5">
+    <div class="d-flex gap-3 flex-wrap mb-4 category-scroll-container">
       <c:choose>
         <c:when test="${not empty categories}">
           <c:forEach var="c" items="${categories}">
@@ -389,18 +492,31 @@
       </c:choose>
     </div>
 
-    <!-- Popular Items Grid -->
-    <div class="row g-4">
+    <!-- Popular Items Scrollable Row -->
+    <div class="product-scroll-container">
       <c:choose>
         <c:when test="${not empty featuredProducts}">
           <c:forEach var="p" items="${featuredProducts}">
-            <div class="col-lg-4 col-md-6">
+            <div class="product-scroll-item">
               <div class="card-premium">
                 <div class="product-img-wrapper">
                   <img src="${p.image.startsWith('http') ? p.image : pageContext.request.contextPath.concat('/images/').concat(p.image)}" alt="${p.name}" class="product-card-img">
                   <div class="img-overlay"></div>
                 </div>
                 <div style="padding:20px;">
+                  <div class="product-rating" style="display:flex;align-items:center;gap:4px;margin-bottom:8px;font-size:0.8rem;">
+                    <c:choose>
+                      <c:when test="${p.reviewCount > 0}">
+                        <i class="fas fa-star" style="color:#FFD700;"></i>
+                        <strong style="color:white;">${p.averageRating}</strong>
+                        <span style="color:rgba(255,255,255,0.6);font-size:0.75rem;margin-left:4px;">(${p.reviewCount} reviews)</span>
+                      </c:when>
+                      <c:otherwise>
+                        <i class="far fa-star" style="color:rgba(255,255,255,0.4);"></i>
+                        <span style="color:rgba(255,255,255,0.4);font-size:0.75rem;margin-left:4px;">No reviews yet</span>
+                      </c:otherwise>
+                    </c:choose>
+                  </div>
                   <h6 style="font-weight:700; margin-bottom:8px;">${p.name}</h6>
                   <p style="color:rgba(255,255,255,1.0);font-size:0.82rem;margin-bottom:14px;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;">${p.description}</p>
                   <div class="d-flex justify-content-between align-items-center">

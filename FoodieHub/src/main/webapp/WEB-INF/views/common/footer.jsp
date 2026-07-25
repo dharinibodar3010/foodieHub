@@ -2,7 +2,7 @@
 <%@ taglib prefix="c" uri="jakarta.tags.core"%>
 
 <c:if test="${empty hideNavbar}">
-<footer style="background: #0d0d14; border-top: 1px solid rgba(255,69,0,0.15); margin-top: 80px; padding-top: 60px; padding-bottom: 30px;">
+<footer style="background: #0d0d14; border-top: 1px solid rgba(255,69,0,0.15); margin-top: 0; padding-top: 40px; padding-bottom: 30px;">
   <div class="container">
     <div class="row g-5">
 

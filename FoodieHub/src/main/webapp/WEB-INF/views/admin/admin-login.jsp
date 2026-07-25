@@ -221,7 +221,8 @@
             <label class="form-label-premium">Password</label>
             <div style="position:relative;">
               <i class="fas fa-lock admin-input-icon"></i>
-              <input type="password" name="password" id="password" class="form-premium w-100 admin-input-field" placeholder="••••••••••" required>
+              <input type="password" name="password" id="password" class="form-premium w-100 admin-input-field" placeholder="••••••••••" style="padding-right: 50px !important;" required>
+              <i class="fas fa-eye" id="togglePassword" style="position:absolute;right:18px;top:50%;transform:translateY(-50%);color:rgba(255,255,255,0.4);cursor:pointer;z-index:2;transition:color 0.3s;" onmouseover="this.style.color='#ffd700'" onmouseout="this.style.color='rgba(255,255,255,0.4)'" title="Show Password"></i>
             </div>
           </div>
 
@@ -269,15 +270,35 @@
 
   // Eyes closed for password
   passInp.addEventListener('focus', () => { 
-    mascot.classList.add('eyes-closed'); 
-    pupilL.style.transform = `translateX(0px)`;
-    pupilR.style.transform = `translateX(0px)`;
+    if (passInp.getAttribute('type') === 'password') {
+      mascot.classList.add('eyes-closed'); 
+      pupilL.style.transform = `translateX(0px)`;
+      pupilR.style.transform = `translateX(0px)`;
+    }
   });
   
   passInp.addEventListener('blur', () => { mascot.classList.remove('eyes-closed'); });
   userInp.addEventListener('blur', () => { 
     pupilL.style.transform = `translateX(0px)`;
     pupilR.style.transform = `translateX(0px)`;
+  });
+
+  // Password visibility toggle
+  const togglePassword = document.getElementById('togglePassword');
+  togglePassword.addEventListener('click', function () {
+    const type = passInp.getAttribute('type') === 'password' ? 'text' : 'password';
+    passInp.setAttribute('type', type);
+    this.classList.toggle('fa-eye');
+    this.classList.toggle('fa-eye-slash');
+    if (type === 'text') {
+      this.setAttribute('title', 'Hide Password');
+      mascot.classList.remove('eyes-closed');
+    } else {
+      this.setAttribute('title', 'Show Password');
+      if (document.activeElement === passInp) {
+        mascot.classList.add('eyes-closed');
+      }
+    }
   });
 
   // Reset Access Logic

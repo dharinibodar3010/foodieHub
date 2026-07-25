@@ -26,7 +26,7 @@ public class UserController {
 	@GetMapping("/")
 	public String home(Model model) {
 		java.util.List<com.example.entity.Product> allProducts = productService.getAllProducts();
-		java.util.List<com.example.entity.Product> featuredProducts = allProducts.size() > 3 ? allProducts.subList(0, 3) : allProducts;
+		java.util.List<com.example.entity.Product> featuredProducts = allProducts.size() > 10 ? allProducts.subList(0, 10) : allProducts;
 		model.addAttribute("featuredProducts", featuredProducts);
 		model.addAttribute("categories", categoryRepository.findAll());
 		return "user/index";

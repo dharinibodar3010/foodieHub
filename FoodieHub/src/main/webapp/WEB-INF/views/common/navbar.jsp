@@ -97,11 +97,13 @@
 
 <!-- Mobile Offcanvas Menu (separate from nav, only for mobile) -->
 <div class="offcanvas offcanvas-start mobile-offcanvas" tabindex="-1" id="mobileMenu" aria-labelledby="mobileMenuLabel">
-  <div class="offcanvas-header" style="border-bottom:1px solid rgba(255,255,255,0.1);padding:20px 24px;">
-    <h5 id="mobileMenuLabel" style="font-weight:800;background:var(--gradient-main);-webkit-background-clip:text;-webkit-text-fill-color:transparent;margin:0;">
-      🍕 FoodieHub
+  <div class="offcanvas-header" style="border-bottom:1px solid rgba(255,255,255,0.1);padding:20px 24px;display:flex;justify-content:space-between;align-items:center;">
+    <h5 id="mobileMenuLabel" style="font-weight:800;margin:0;font-size:1.4rem;">
+      🍕 <span style="background:var(--gradient-main);-webkit-background-clip:text;-webkit-text-fill-color:transparent;text-shadow:0 2px 10px rgba(255,165,0,0.4);">Foodie</span><span style="color:white;">Hub</span>
     </h5>
-    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+    <button type="button" class="mobile-close-btn" data-bs-dismiss="offcanvas" aria-label="Close" style="background:rgba(255,255,255,0.1);border:1px solid rgba(255,255,255,0.2);color:rgba(255,255,255,0.9);font-size:1.1rem;width:34px;height:34px;border-radius:50%;display:flex;align-items:center;justify-content:center;margin-left:auto;">
+      <i class="fas fa-times"></i>
+    </button>
   </div>
   <div class="offcanvas-body" style="padding:24px;overflow:hidden;">
     <ul class="list-unstyled mb-0" style="display:flex;flex-direction:column;gap:12px;">
@@ -126,7 +128,7 @@
         <li>
           <a href="${pageContext.request.contextPath}/cart" class="mobile-menu-link">
             <i class="fas fa-shopping-cart"></i> Cart
-            <span class="cart-count" style="background:#ff4500;color:#fff;border-radius:50%;padding:1px 6px;font-size:0.7rem;margin-left:4px;">0</span>
+            <span class="cart-count" style="position:static !important; background:#ff4500;color:#fff;border-radius:50%;padding:2px 8px;font-size:0.75rem;margin-left:auto;">0</span>
           </a>
         </li>
         <li>

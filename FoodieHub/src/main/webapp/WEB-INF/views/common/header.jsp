@@ -58,6 +58,9 @@
     background: var(--dark) !important;
     color: var(--text-primary) !important;
     min-height: 100vh;
+    <c:if test="${empty hideNavbar}">
+    padding-top: 76px; /* Space for fixed navbar */
+    </c:if>
   }
   
   h1, h2, h3, h4, h5, h6, p, label, li {
@@ -80,9 +83,11 @@
     -webkit-backdrop-filter: blur(20px);
     border-bottom: 1px solid var(--dark-border);
     padding: 12px 0;
-    position: sticky;
+    position: fixed;
     top: 0;
-    z-index: 1000;
+    left: 0;
+    width: 100%;
+    z-index: 1030;
     box-shadow: 0 4px 30px rgba(255, 69, 0, 0.1);
   }
 
@@ -709,6 +714,35 @@
       background: rgba(255,255,255,0.03);
       border-radius: 12px;
       font-size: 1.05rem;
+    }
+    
+    /* Admin Layout Overrides for Mobile */
+    body > div[style*="display:flex"] {
+      flex-direction: column !important;
+    }
+    body > div[style*="display:flex"] > div[style*="width:260px"] {
+      width: 100% !important;
+      flex-shrink: 1 !important;
+    }
+    body > div[style*="display:flex"] > div[style*="flex:1"] {
+      width: 100% !important;
+      padding: 16px !important;
+      min-height: auto !important;
+    }
+    .admin-page-header { margin: -16px -16px 20px -16px !important; padding: 16px !important; }
+  }
+
+  /* Admin Sticky Fixes & Spacing (Desktop) */
+  @media (min-width: 992px) {
+    body > div[style*="display:flex"] > div[style*="flex:1"] > div[style*="position:sticky"],
+    body > div[style*="display:flex"] > div[style*="flex:1"] > div[style*="position: sticky"] {
+      top: 0 !important;
+      margin-bottom: 0 !important; /* Remove excessive space below header */
+    }
+    
+    /* Reduce padding on the main content wrapper to tighten layout */
+    body > div[style*="display:flex"] > div[style*="flex:1"] {
+      padding: 16px 32px !important;
     }
   }
 </style>
