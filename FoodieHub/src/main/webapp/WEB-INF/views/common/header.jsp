@@ -3,7 +3,15 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<c:choose>
+  <c:when test="${not empty requestScope.hideNavbar}">
+    <!-- Force desktop scaling for admin panel on mobile -->
+    <meta name="viewport" content="width=1200">
+  </c:when>
+  <c:otherwise>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  </c:otherwise>
+</c:choose>
 <title>FoodieHub - Fresh Food Delivered Fast</title>
 <meta name="color-scheme" content="dark">
 <meta name="description" content="FoodieHub - Order your favourite food online. Fast delivery, best quality and amazing offers.">
