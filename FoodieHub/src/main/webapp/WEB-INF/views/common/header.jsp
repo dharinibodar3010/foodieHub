@@ -4,7 +4,7 @@
 <head>
 <meta charset="UTF-8">
 <c:choose>
-  <c:when test="${not empty requestScope.hideNavbar}">
+  <c:when test="${not empty requestScope.hideNavbar and empty requestScope.isLoginPage}">
     <!-- Force desktop scaling for admin panel on mobile -->
     <meta name="viewport" content="width=1200">
   </c:when>
@@ -263,6 +263,9 @@
     transition: all 0.4s ease;
     overflow: hidden;
     position: relative;
+    display: flex;
+    flex-direction: column;
+    height: 100%;
   }
 
   .card-premium:hover {

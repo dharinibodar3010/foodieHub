@@ -4,7 +4,7 @@
 
 <%@ include file="../common/header.jsp"%>
 
-<div style="padding:60px 0 100px;">
+<div style="padding:40px 0 40px;">
   <div class="container">
 
     <!-- Page Header -->

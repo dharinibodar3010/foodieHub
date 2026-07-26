@@ -6,12 +6,11 @@
 <style>
   /* ===== HERO SECTION ===== */
   .hero-section {
-    min-height: 100vh;
     display: flex;
     align-items: center;
     position: relative;
     overflow: hidden;
-    padding: 40px 0;
+    padding: 60px 0;
   }
 
   .hero-bg {
@@ -45,7 +44,7 @@
   .hero-circle-2 { width: 350px; height: 350px; top: 50px; right: 50px; animation-duration: 15s; animation-direction: reverse; }
 
   .hero-title {
-    font-size: clamp(2.8rem, 6vw, 5rem);
+    font-size: clamp(2rem, 4vw, 3.5rem);
     font-weight: 900;
     line-height: 1.1;
     margin-bottom: 24px;
@@ -132,7 +131,7 @@
     height: 100%;
   }
 
-  .feature-card:hover {
+  .feature-card:hover, .feature-card:active {
     background: rgba(255,69,0,0.06);
     border-color: rgba(255,69,0,0.25);
     transform: translateY(-8px);
@@ -151,7 +150,7 @@
     transition: all 0.3s ease;
   }
 
-  .feature-card:hover .feature-icon {
+  .feature-card:hover .feature-icon, .feature-card:active .feature-icon {
     background: rgba(255,69,0,0.2);
     transform: scale(1.1);
   }
@@ -503,7 +502,7 @@
                   <img src="${p.image.startsWith('http') ? p.image : pageContext.request.contextPath.concat('/images/').concat(p.image)}" alt="${p.name}" class="product-card-img">
                   <div class="img-overlay"></div>
                 </div>
-                <div style="padding:20px;">
+                <div style="padding:20px; display:flex; flex-direction:column; flex:1;">
                   <div class="product-rating" style="display:flex;align-items:center;gap:4px;margin-bottom:8px;font-size:0.8rem;">
                     <c:choose>
                       <c:when test="${p.reviewCount > 0}">
@@ -519,7 +518,7 @@
                   </div>
                   <h6 style="font-weight:700; margin-bottom:8px;">${p.name}</h6>
                   <p style="color:rgba(255,255,255,1.0);font-size:0.82rem;margin-bottom:14px;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;">${p.description}</p>
-                  <div class="d-flex justify-content-between align-items-center">
+                  <div class="d-flex justify-content-between align-items-center" style="margin-top:auto;">
                     <span class="price-tag">₹${p.price}</span>
                     <div style="margin:0;">
                       <button type="button" class="btn-primary-premium" onclick="addToCartAjax(this, ${p.id})" style="padding:8px 20px; font-size:0.82rem; border:none; border-radius:12px; cursor:pointer;">

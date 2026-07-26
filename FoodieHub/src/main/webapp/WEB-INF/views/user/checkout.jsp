@@ -4,7 +4,7 @@
 <%@ include file="../common/header.jsp"%>
 
 <style>
-  .checkout-page { padding: 60px 0 100px; }
+  .checkout-page { padding: 40px 0 40px; }
 
   .checkout-section-title {
     font-size: 0.8rem;

@@ -6,10 +6,9 @@
 
 <style>
   .auth-page {
-    min-height: 100vh;
     display: flex;
     align-items: center;
-    padding: 80px 0;
+    padding: 40px 0;
     position: relative;
   }
 

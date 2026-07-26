@@ -4,7 +4,7 @@
 <%@ include file="../common/header.jsp"%>
 
 <style>
-  .product-details-page { padding: 60px 0 100px; }
+  .product-details-page { padding: 40px 0 40px; }
   
   .details-card {
     background: rgba(18,18,26,0.7);

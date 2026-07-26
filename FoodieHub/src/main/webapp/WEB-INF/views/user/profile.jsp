@@ -4,7 +4,7 @@
 <%@ include file="../common/header.jsp"%>
 
 <style>
-  .profile-page { padding: 60px 0 100px; }
+  .profile-page { padding: 40px 0 40px; }
   .profile-header {
     background: rgba(18,18,26,0.7);
     border: 1px solid rgba(255,255,255,0.06);

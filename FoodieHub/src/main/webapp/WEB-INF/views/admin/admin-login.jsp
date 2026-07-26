@@ -2,6 +2,7 @@
 <%@ taglib prefix="c" uri="jakarta.tags.core"%>
 
 <c:set var="hideNavbar" value="true" scope="request" />
+<c:set var="isLoginPage" value="true" scope="request" />
 <%@ include file="../common/header.jsp"%>
 
 <style>
@@ -147,6 +148,11 @@
   .btn-glossy:hover {
     transform: translateY(-3px);
     box-shadow: 0 15px 35px rgba(255,140,0,0.4), inset 0 2px 0 rgba(255,255,255,0.5);
+  }
+
+  @media (max-width: 576px) {
+    .admin-login-page { padding: 40px 15px; }
+    .admin-login-card { padding: 30px 24px; }
   }
 </style>
 

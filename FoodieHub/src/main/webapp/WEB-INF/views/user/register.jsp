@@ -22,7 +22,7 @@
   }
   .auth-card > * { position: relative; z-index: 2; }
 </style>
-<div style="min-height:100vh;display:flex;align-items:center;padding:80px 0;position:relative;">
+<div style="display:flex;align-items:center;padding:40px 0;position:relative;">
   <div style="position:absolute;inset:0;background:radial-gradient(ellipse at 20% 50%,rgba(255,69,0,0.1) 0%,transparent 50%),radial-gradient(ellipse at 80% 80%,rgba(255,140,0,0.06) 0%,transparent 40%);"></div>
 
   <div class="container" style="position:relative;z-index:1;">

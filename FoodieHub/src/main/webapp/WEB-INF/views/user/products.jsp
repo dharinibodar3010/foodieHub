@@ -162,7 +162,12 @@
   .product-fav:hover i { color: #ff4500; }
   .product-fav.active i { color: #ff4500; }
 
-  .product-body { padding: 20px; }
+  .product-body {
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+  }
 
   .product-category {
     font-size: 0.72rem;
@@ -205,6 +210,7 @@
     display: flex;
     justify-content: space-between;
     align-items: center;
+    margin-top: auto;
   }
 
   .product-price {
