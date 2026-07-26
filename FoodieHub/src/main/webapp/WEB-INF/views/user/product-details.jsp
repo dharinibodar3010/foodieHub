@@ -25,7 +25,9 @@
   
   .main-img-wrapper {
     width: 100%;
-    height: 450px;
+    height: 350px;
+    max-width: 450px;
+    margin: 0 auto;
     border-radius: 20px;
     overflow: hidden;
     position: relative;
@@ -59,22 +61,22 @@
   }
   
   .product-title {
-    font-size: 2.6rem;
-    font-weight: 900;
+    font-size: 2rem;
+    font-weight: 800;
     margin-bottom: 12px;
     line-height: 1.2;
   }
   
   .product-desc {
-    color: rgba(255,255,255,0.5);
-    font-size: 1.05rem;
-    line-height: 1.8;
-    margin-bottom: 24px;
+    color: rgba(255,255,255,0.6);
+    font-size: 0.95rem;
+    line-height: 1.6;
+    margin-bottom: 20px;
   }
   
   .price-large {
-    font-size: 2.4rem;
-    font-weight: 900;
+    font-size: 1.8rem;
+    font-weight: 800;
     background: linear-gradient(135deg, #ff4500, #ffd700);
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
@@ -122,9 +124,9 @@
   }
   
   .features-grid {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 16px;
+    display: flex;
+    justify-content: space-between;
+    gap: 8px;
     margin-top: 40px;
     padding-top: 32px;
     border-top: 1px solid rgba(255,255,255,0.08);
@@ -132,8 +134,11 @@
   
   .feature-item {
     display: flex;
+    flex-direction: column;
     align-items: center;
-    gap: 12px;
+    text-align: center;
+    gap: 8px;
+    flex: 1;
   }
   
   .f-icon {
@@ -148,9 +153,45 @@
   }
   
   .f-text {
-    font-size: 0.85rem;
+    font-size: 0.75rem;
     color: rgba(255,255,255,0.6);
     font-weight: 500;
+  }
+
+  .related-title { font-weight:800; font-size:1.6rem; margin-bottom:24px; }
+  .rp-img-wrapper { width: 100%; aspect-ratio: 4/3; position:relative; overflow:hidden; }
+  .rp-img { width:100%; height:100%; object-fit:cover; display:block; transition:transform 0.5s; }
+  .rp-img-wrapper:hover .rp-img { transform: scale(1.08); }
+  .rp-details { padding: 16px; display:flex; flex-direction:column; flex:1; }
+  .rp-name { font-weight:700; margin-bottom:8px; font-size:0.95rem; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
+  .rp-footer { display:flex; justify-content:space-between; align-items:center; margin-top:auto; flex-wrap:wrap; gap:4px; }
+  .rp-price { font-size:1rem; font-weight:700; color:#ff4500; }
+  .rp-add-btn { padding:6px 12px; font-size:0.75rem; }
+
+  @media (max-width: 768px) {
+    .product-details-page { padding: 20px 0; }
+    .details-card { padding: 20px; border-radius: 20px; }
+    .main-img-wrapper { height: 160px; border-radius: 14px; }
+    .product-title { font-size: 1.25rem; margin-bottom: 6px; }
+    .price-large { font-size: 1.25rem; margin-bottom: 16px; }
+    .product-desc { font-size: 0.75rem; margin-bottom: 12px; }
+    .qty-selector { margin-bottom: 0 !important; padding: 2px; }
+    .qty-btn { width: 32px; height: 32px; font-size: 1rem; border-radius: 8px; }
+    .qty-input { width: 40px; font-size: 0.9rem; }
+    .features-grid { gap: 4px; margin-top: 24px; padding-top: 20px; }
+    .f-icon { width: 32px; height: 32px; font-size: 0.9rem; }
+    .f-text { font-size: 0.65rem; line-height: 1.2; }
+    .action-row { flex-wrap: nowrap !important; gap: 8px !important; overflow-x: auto; padding-bottom: 5px; }
+    .action-row::-webkit-scrollbar { display: none; }
+    .btn-primary-premium, .btn-outline-premium { padding: 8px 12px !important; font-size: 0.75rem !important; white-space: nowrap; flex-shrink: 0; }
+    
+    .related-title { font-size: 1.2rem; margin-bottom: 16px; }
+    .related-section { margin-top: 24px !important; }
+    .rp-img-wrapper { aspect-ratio: 1/1; height: auto; }
+    .rp-details { padding: 10px; }
+    .rp-name { font-size: 0.8rem; margin-bottom: 4px; }
+    .rp-price { font-size: 0.85rem; }
+    .rp-add-btn { padding: 4px 8px !important; font-size: 0.65rem !important; width:100%; justify-content:center; }
   }
 </style>
 
@@ -172,17 +213,17 @@
         <!-- Image Left -->
         <div class="col-lg-5">
           <div class="main-img-wrapper animate__animated animate__fadeInLeft">
-            <img src="${pageContext.request.contextPath}/images/${product.image}"
+            <img src="${product.image.trim().startsWith('http') ? product.image.trim() : pageContext.request.contextPath.concat('/images/').concat(product.image.trim())}"
                  onerror="this.src='https://images.unsplash.com/photo-1565299624946-b28f40a0ae38?w=800&q=80'"
                  alt="${product.name}" class="main-img">
             
             <c:if test="${product.available}">
-              <div style="position:absolute;top:20px;left:20px;background:rgba(40,167,69,0.9);backdrop-filter:blur(5px);color:white;padding:6px 16px;border-radius:20px;font-size:0.8rem;font-weight:700;">
-                ✅ In Stock
+              <div style="position:absolute;top:12px;left:12px;background:rgba(40,167,69,0.9);backdrop-filter:blur(5px);color:white;padding:4px 10px;border-radius:12px;font-size:0.7rem;font-weight:700;">
+                ✅ Available
               </div>
             </c:if>
             <c:if test="${not product.available}">
-              <div style="position:absolute;top:20px;left:20px;background:rgba(220,53,69,0.9);backdrop-filter:blur(5px);color:white;padding:6px 16px;border-radius:20px;font-size:0.8rem;font-weight:700;">
+              <div style="position:absolute;top:12px;left:12px;background:rgba(220,53,69,0.9);backdrop-filter:blur(5px);color:white;padding:4px 10px;border-radius:12px;font-size:0.7rem;font-weight:700;">
                 ❌ Out of Stock
               </div>
             </c:if>
@@ -212,31 +253,32 @@
           
           <div class="price-large">₹${product.price}</div>
           
-          <form action="${pageContext.request.contextPath}/cart" method="get">
+          <form action="${pageContext.request.contextPath}/cart" method="post">
             <!-- Simulated Form -->
             <input type="hidden" name="productId" value="${product.id}">
             
-            <div class="qty-selector">
-              <button type="button" class="qty-btn" onclick="updateQ(-1)">−</button>
-              <input type="number" id="qtyInput" name="quantity" class="qty-input" value="1" min="1" max="20" readonly>
-              <button type="button" class="qty-btn" onclick="updateQ(1)">+</button>
-            </div>
-            
-            <div style="display:flex;gap:16px;flex-wrap:wrap;">
+            <div class="action-row" style="display:flex;align-items:center;gap:16px;margin-bottom:32px;flex-wrap:wrap;">
+              <div class="qty-selector" style="margin-bottom:0;">
+                <button type="button" class="qty-btn" onclick="updateQ(-1)">−</button>
+                <input type="number" id="qtyInput" name="quantity" class="qty-input" value="1" min="1" max="20" readonly>
+                <button type="button" class="qty-btn" onclick="updateQ(1)">+</button>
+              </div>
+              
               <c:if test="${product.available}">
-                <button type="button" onclick="window.location.href='${pageContext.request.contextPath}/cart'" class="btn-primary-premium" style="padding:16px 40px;font-size:1.05rem;">
-                  <i class="fas fa-shopping-cart"></i> Add to Cart
-                </button>
-                <button type="button" onclick="window.location.href='${pageContext.request.contextPath}/checkout'" class="btn-outline-premium" style="padding:16px 40px;font-size:1.05rem;background:rgba(255,255,255,0.05);">
-                  <i class="fas fa-bolt text-warning"></i> Buy Now
+                <button type="submit" class="btn-primary-premium" style="padding:10px 24px;font-size:0.95rem;">
+                  <i class="fas fa-shopping-cart"></i> Add Items
                 </button>
               </c:if>
               
               <c:if test="${not product.available}">
-                <button type="button" disabled class="btn-primary-premium" style="background:rgba(255,255,255,0.1);color:rgba(255,255,255,0.4);box-shadow:none;cursor:not-allowed;padding:16px 40px;font-size:1.05rem;">
-                  Currently Unavailable
+                <button type="button" disabled class="btn-primary-premium" style="background:rgba(255,255,255,0.1);color:rgba(255,255,255,0.4);box-shadow:none;cursor:not-allowed;padding:10px 24px;font-size:0.95rem;">
+                  Unavailable
                 </button>
               </c:if>
+
+              <button type="button" onclick="openReviewModal()" class="btn-outline-premium" style="padding:10px 24px;font-size:0.95rem;background:rgba(255,255,255,0.05);">
+                <i class="fas fa-star text-warning"></i> Write Review
+              </button>
             </div>
           </form>
           
@@ -264,12 +306,34 @@
       </div>
     </div>
     
-    <!-- Write Review Button -->
-    <div style="text-align:center;margin-top:40px;margin-bottom:40px;">
-      <button onclick="openReviewModal()" class="btn-primary-premium" style="padding:14px 36px;font-size:1rem;">
-        <i class="fas fa-star me-2"></i>Write a Review
-      </button>
-    </div>
+    <!-- Related Products -->
+    <c:if test="${not empty relatedProducts}">
+      <div class="related-section" style="margin-top:60px; margin-bottom: 20px;">
+        <h3 class="related-title">You might also like</h3>
+        <div class="row g-3 g-md-4">
+          <c:forEach var="rp" items="${relatedProducts}" end="3">
+            <div class="col-lg-3 col-md-4 col-6">
+              <div class="card-premium">
+                <a href="${pageContext.request.contextPath}/product?id=${rp.id}" style="display:block;">
+                  <div class="product-img-wrapper rp-img-wrapper">
+                    <img src="${rp.image.trim().startsWith('http') ? rp.image.trim() : pageContext.request.contextPath.concat('/images/').concat(rp.image.trim())}" alt="${rp.name}" class="rp-img">
+                  </div>
+                </a>
+                <div class="rp-details">
+                  <h6 class="rp-name">${rp.name}</h6>
+                  <div class="rp-footer">
+                    <span class="rp-price">₹${rp.price}</span>
+                    <button type="button" class="btn-primary-premium rp-add-btn" onclick="addToCartAjax(this, ${rp.id})">
+                      <i class="fas fa-plus"></i> Add
+                    </button>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </c:forEach>
+        </div>
+      </div>
+    </c:if>
 
   </div>
 </div>

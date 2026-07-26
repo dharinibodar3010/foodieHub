@@ -268,12 +268,6 @@
     height: 100%;
   }
 
-  .card-premium:hover {
-    border-color: rgba(255, 215, 0, 0.4); /* Gold hover border */
-    transform: translateY(-8px);
-    box-shadow: 0 12px 35px rgba(255, 75, 43, 0.2);
-  }
-
   .card-premium::before {
     content: '';
     position: absolute;
@@ -284,7 +278,14 @@
     transition: opacity 0.3s ease;
   }
 
-  .card-premium:hover::before { opacity: 1; }
+  @media (hover: hover) {
+    .card-premium:hover {
+      border-color: rgba(255, 215, 0, 0.4); /* Gold hover border */
+      transform: translateY(-8px);
+      box-shadow: 0 12px 35px rgba(255, 75, 43, 0.2);
+    }
+    .card-premium:hover::before { opacity: 1; }
+  }
 
   /* === FORM INPUTS === */
   .form-premium {

@@ -3,6 +3,36 @@
 
 <%@ include file="../common/header.jsp"%>
 
+<style>
+  .cart-item-inner {
+    display: flex;
+    width: 100%;
+    align-items: center;
+    gap: 16px;
+    position: relative;
+    z-index: 2;
+  }
+  .cart-item-actions {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+  }
+  @media (max-width: 768px) {
+    .cart-item-inner {
+      flex-direction: column;
+      align-items: flex-start;
+    }
+    .cart-item-actions {
+      width: 100%;
+      justify-content: space-between;
+      margin-top: 10px;
+    }
+    .cart-item-inner > div:nth-child(1), .cart-item-inner > img {
+      /* Ensure image and details can stay side-by-side if needed, but flex-direction:column puts them vertically.
+         Actually, let's wrap image and details in a flex row */
+    }
+  }
+</style>
 <div style="padding:40px 0 40px;">
   <div class="container">
 
@@ -37,25 +67,29 @@
           <c:forEach var="c" items="${cartItems}">
           <div class="cart-item-row" data-id="${c.id}" data-price="${c.product.price}" data-qty="${c.quantity}" style="background:rgba(18,18,26,0.7);backdrop-filter:blur(25px);-webkit-backdrop-filter:blur(25px);box-shadow:0 15px 35px rgba(0,0,0,0.4);border:1px solid rgba(255,255,255,0.06);border-radius:24px;padding:20px;display:flex;align-items:center;gap:16px;transition:all 0.3s;position:relative;overflow:hidden;">
             <div style="position:absolute;top:-30px;left:-30px;width:100px;height:100px;background:rgba(255,94,0,0.1);border-radius:50%;filter:blur(30px);pointer-events:none;z-index:0;"></div>
-            <div style="display:flex;width:100%;align-items:center;gap:16px;position:relative;z-index:2;">
-            <img src="${c.product.image.startsWith('http') ? c.product.image : pageContext.request.contextPath.concat('/images/').concat(c.product.image)}" alt="${c.product.name}"
-                 style="width:80px;height:80px;border-radius:14px;object-fit:cover;flex-shrink:0;">
-            <div style="flex:1;">
-              <div style="font-weight:700;font-size:1rem;color:white;margin-bottom:4px;">${c.product.name}</div>
-              <div style="font-size:0.8rem;color:rgba(255,255,255,1.0);margin-bottom:10px;">${c.product.category.name}</div>
-              <div style="font-size:0.9rem;font-weight:700;background:linear-gradient(135deg,#ff4500,#ff8c00);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;">₹${c.product.price} each</div>
-            </div>
-            <div style="display:flex;align-items:center;gap:0;background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.1);border-radius:12px;overflow:hidden;">
-              <button onclick="changeQty(this,-1)" style="width:38px;height:38px;border:none;background:transparent;color:rgba(255,255,255,1.0);cursor:pointer;font-size:1rem;transition:all 0.2s;" onmouseover="this.style.background='rgba(255,69,0,0.2)';this.style.color='#ff4500'" onmouseout="this.style.background='transparent';this.style.color='rgba(255,255,255,1.0)'">−</button>
-              <span class="qty-display" style="min-width:36px;text-align:center;font-weight:700;font-size:0.95rem;color:white;">${c.quantity}</span>
-              <button onclick="changeQty(this,1)" style="width:38px;height:38px;border:none;background:transparent;color:rgba(255,255,255,1.0);cursor:pointer;font-size:1rem;transition:all 0.2s;" onmouseover="this.style.background='rgba(255,69,0,0.2)';this.style.color='#ff4500'" onmouseout="this.style.background='transparent';this.style.color='rgba(255,255,255,1.0)'">+</button>
-            </div>
-            <div style="min-width:80px;text-align:right;">
-              <div class="item-total" style="font-size:1.1rem;font-weight:800;background:linear-gradient(135deg,#ff4500,#ff8c00);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;">₹${c.product.price * c.quantity}</div>
-            </div>
-            <a href="${pageContext.request.contextPath}/removeCart/${c.id}" style="width:36px;height:36px;border-radius:10px;border:1px solid rgba(220,53,69,0.3);background:rgba(220,53,69,0.1);color:#dc3545;cursor:pointer;font-size:0.85rem;display:flex;align-items:center;justify-content:center;text-decoration:none;transition:all 0.3s;flex-shrink:0;" onmouseover="this.style.background='rgba(220,53,69,0.25)'" onmouseout="this.style.background='rgba(220,53,69,0.1)'">
-              <i class="fas fa-trash"></i>
-            </a>
+            <div class="cart-item-inner">
+              <div style="display:flex; align-items:center; gap:16px; width:100%;">
+                <img src="${c.product.image.startsWith('http') ? c.product.image : pageContext.request.contextPath.concat('/images/').concat(c.product.image)}" alt="${c.product.name}"
+                     style="width:80px;height:80px;border-radius:14px;object-fit:cover;flex-shrink:0;">
+                <div style="flex:1;">
+                  <div style="font-weight:700;font-size:1rem;color:white;margin-bottom:4px;">${c.product.name}</div>
+                  <div style="font-size:0.8rem;color:rgba(255,255,255,1.0);margin-bottom:10px;">${c.product.category.name}</div>
+                  <div style="font-size:0.9rem;font-weight:700;background:linear-gradient(135deg,#ff4500,#ff8c00);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;">₹${c.product.price} each</div>
+                </div>
+              </div>
+              <div class="cart-item-actions">
+                <div style="display:flex;align-items:center;gap:0;background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.1);border-radius:12px;overflow:hidden;">
+                  <button onclick="changeQty(this,-1)" style="width:38px;height:38px;border:none;background:transparent;color:rgba(255,255,255,1.0);cursor:pointer;font-size:1rem;transition:all 0.2s;" onmouseover="this.style.background='rgba(255,69,0,0.2)';this.style.color='#ff4500'" onmouseout="this.style.background='transparent';this.style.color='rgba(255,255,255,1.0)'">−</button>
+                  <span class="qty-display" style="min-width:36px;text-align:center;font-weight:700;font-size:0.95rem;color:white;">${c.quantity}</span>
+                  <button onclick="changeQty(this,1)" style="width:38px;height:38px;border:none;background:transparent;color:rgba(255,255,255,1.0);cursor:pointer;font-size:1rem;transition:all 0.2s;" onmouseover="this.style.background='rgba(255,69,0,0.2)';this.style.color='#ff4500'" onmouseout="this.style.background='transparent';this.style.color='rgba(255,255,255,1.0)'">+</button>
+                </div>
+                <div style="min-width:80px;text-align:right;">
+                  <div class="item-total" style="font-size:1.1rem;font-weight:800;background:linear-gradient(135deg,#ff4500,#ff8c00);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;">₹${c.product.price * c.quantity}</div>
+                </div>
+                <a href="${pageContext.request.contextPath}/removeCart/${c.id}" style="width:36px;height:36px;border-radius:10px;border:1px solid rgba(220,53,69,0.3);background:rgba(220,53,69,0.1);color:#dc3545;cursor:pointer;font-size:0.85rem;display:flex;align-items:center;justify-content:center;text-decoration:none;transition:all 0.3s;flex-shrink:0;" onmouseover="this.style.background='rgba(220,53,69,0.25)'" onmouseout="this.style.background='rgba(220,53,69,0.1)'">
+                  <i class="fas fa-trash"></i>
+                </a>
+              </div>
             </div>
           </div>
           </c:forEach>
@@ -147,8 +181,8 @@
               <div style="font-size:0.68rem;color:rgba(255,255,255,0.35);">Fast</div>
             </div>
             <div style="text-align:center;">
-              <div style="font-size:1.2rem;margin-bottom:4px;">🔄</div>
-              <div style="font-size:0.68rem;color:rgba(255,255,255,0.35);">Easy Returns</div>
+              <div style="font-size:1.2rem;margin-bottom:4px;">🌿</div>
+              <div style="font-size:0.68rem;color:rgba(255,255,255,0.35);">Fresh</div>
             </div>
           </div>
           </div>
@@ -167,20 +201,40 @@ function changeQty(btn, delta) {
   const qtyEl = row.querySelector('.qty-display');
   const price = parseFloat(row.getAttribute('data-price'));
   const cartId = row.getAttribute('data-id');
-  let qty = parseInt(qtyEl.textContent) + delta;
+  let currentQty = parseInt(qtyEl.textContent);
+  let qty = currentQty + delta;
+  
   if (qty < 1) qty = 1;
   if (qty > 20) qty = 20;
+  
+  if (currentQty === qty) return;
+  
+  // Optimistic UI Update
+  qtyEl.textContent = qty;
+  row.setAttribute('data-qty', qty);
+  row.querySelector('.item-total').textContent = '₹' + (price * qty).toLocaleString('en-IN');
+  updateSummary();
   
   // Call backend to update qty
   fetch('${pageContext.request.contextPath}/updateCartQty?cartId=' + cartId + '&quantity=' + qty, { method: 'POST' })
     .then(res => res.text())
     .then(data => {
-      if(data === 'success') {
-        qtyEl.textContent = qty;
-        row.setAttribute('data-qty', qty);
-        row.querySelector('.item-total').textContent = '₹' + (price * qty).toLocaleString('en-IN');
+      if(data !== 'success') {
+        // Revert on failure
+        qtyEl.textContent = currentQty;
+        row.setAttribute('data-qty', currentQty);
+        row.querySelector('.item-total').textContent = '₹' + (price * currentQty).toLocaleString('en-IN');
         updateSummary();
+        showCartToast('❌ Failed to update quantity');
       }
+    })
+    .catch(err => {
+      // Revert on error
+      qtyEl.textContent = currentQty;
+      row.setAttribute('data-qty', currentQty);
+      row.querySelector('.item-total').textContent = '₹' + (price * currentQty).toLocaleString('en-IN');
+      updateSummary();
+      showCartToast('❌ Error updating quantity');
     });
 }
 

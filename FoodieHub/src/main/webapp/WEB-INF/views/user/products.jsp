@@ -93,19 +93,20 @@
     content: ''; position: absolute; top: -30px; left: -30px; width: 100px; height: 100px;
     background: rgba(255,94,0,0.15); border-radius: 50%; filter: blur(30px); pointer-events: none; z-index: 0; transition: all 0.4s ease;
   }
-  .product-card:hover::before {
-    background: rgba(255,94,0,0.25);
-    transform: scale(1.2);
-  }
-  .product-card > * { position: relative; z-index: 2; }
+  @media (hover: hover) {
+    .product-card:hover {
+      border-color: rgba(255,69,0,0.3);
+      transform: translateY(-8px);
+    }
 
-  .product-card:hover {
-    border-color: rgba(255,69,0,0.3);
-    transform: translateY(-8px);
-  }
-
-  .product-card:hover .product-card-img {
-    transform: scale(1.08);
+    .product-card:hover .product-card-img {
+      transform: scale(1.08);
+    }
+    
+    .product-card:hover::before {
+      background: rgba(255,94,0,0.25);
+      transform: scale(1.2);
+    }
   }
 
   .product-card-img-wrap {
@@ -276,9 +277,11 @@
     .filter-select { width: 100%; min-width: 100%; }
     .product-body { padding: 10px; }
     .product-name { font-size: 0.85rem; margin-bottom: 2px; }
-    .product-price { font-size: 1rem; }
+    .product-price { font-size: 0.95rem; }
     .product-desc { font-size: 0.75rem; margin-bottom: 10px; }
-    .btn-add-cart { padding: 6px 10px; font-size: 0.7rem; }
+    .product-footer { flex-wrap: wrap; gap: 4px; justify-content: space-between; }
+    .product-footer > div { gap: 4px !important; }
+    .btn-add-cart { padding: 5px 8px !important; font-size: 0.65rem !important; }
     .product-fav { width: 28px; height: 28px; }
     /* 2 columns on mobile handled by col-6 class */
     .row.g-4 { 
@@ -375,9 +378,10 @@
                data-category="${p.category != null ? p.category.name : ''}">
             <div class="product-card">
               <div class="product-card-img-wrap">
-                <img src="${p.image.startsWith('http') ? p.image : pageContext.request.contextPath.concat('/images/').concat(p.image)}"
-                     alt="${p.name}" class="product-card-img">
-                <div class="product-card-overlay"></div>
+                <a href="${pageContext.request.contextPath}/product?id=${p.id}" style="display:block;width:100%;height:100%;">
+                  <img src="${p.image.trim().startsWith('http') ? p.image.trim() : pageContext.request.contextPath.concat('/images/').concat(p.image.trim())}" alt="${p.name}" class="product-card-img">
+                  <div class="product-card-overlay"></div>
+                </a>
                 <c:if test="${p.available}">
                   <span class="product-badge">✅ Available</span>
                 </c:if>

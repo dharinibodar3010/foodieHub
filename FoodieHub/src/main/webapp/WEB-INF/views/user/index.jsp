@@ -498,10 +498,12 @@
           <c:forEach var="p" items="${featuredProducts}">
             <div class="product-scroll-item">
               <div class="card-premium">
-                <div class="product-img-wrapper">
-                  <img src="${p.image.startsWith('http') ? p.image : pageContext.request.contextPath.concat('/images/').concat(p.image)}" alt="${p.name}" class="product-card-img">
-                  <div class="img-overlay"></div>
-                </div>
+                <a href="${pageContext.request.contextPath}/product?id=${p.id}" style="display:block;">
+                  <div class="product-img-wrapper">
+                    <img src="${p.image.trim().startsWith('http') ? p.image.trim() : pageContext.request.contextPath.concat('/images/').concat(p.image.trim())}" alt="${p.name}" class="product-card-img">
+                    <div class="img-overlay"></div>
+                  </div>
+                </a>
                 <div style="padding:20px; display:flex; flex-direction:column; flex:1;">
                   <div class="product-rating" style="display:flex;align-items:center;gap:4px;margin-bottom:8px;font-size:0.8rem;">
                     <c:choose>

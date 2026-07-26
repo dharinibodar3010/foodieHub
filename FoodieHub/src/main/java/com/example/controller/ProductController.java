@@ -26,6 +26,27 @@ public class ProductController {
 		return "user/products";
 	}
 
+	@GetMapping("/product")
+	public String productDetails(@RequestParam("id") Long id, Model model) {
+		Product product = productService.getProductById(id);
+		if (product == null) {
+			return "redirect:/products";
+		}
+		model.addAttribute("product", product);
+		
+		java.util.List<Product> allProducts = productService.getAllProducts();
+		java.util.List<Product> relatedProducts = new java.util.ArrayList<>();
+		for(Product p : allProducts) {
+			if(!p.getId().equals(product.getId())) {
+				relatedProducts.add(p);
+			}
+		}
+		java.util.Collections.shuffle(relatedProducts);
+		model.addAttribute("relatedProducts", relatedProducts);
+		
+		return "user/product-details";
+	}
+
 	@GetMapping("/viewProducts")
 	public String viewProducts(Model model) {
 		model.addAttribute("products", productService.getAllProducts());

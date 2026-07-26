@@ -67,15 +67,11 @@
   }
   .payment-method-name { font-weight: 700; font-size: 0.95rem; color: white; }
   .payment-method-desc { font-size: 0.78rem; color: rgba(255,255,255,1.0); margin-top: 2px; }
-  .razorpay-badge {
-    margin-left: auto; background: rgba(23, 108, 232, 0.15);
-    border: 1px solid rgba(23,108,232,0.3); color: #4b9aff;
-    font-size: 0.72rem; font-weight: 700; padding: 3px 10px; border-radius: 6px;
-  }
+
   .test-mode-ribbon {
-    position: fixed;
-    top: 30px;
-    right: -40px;
+    position: absolute;
+    top: 25px;
+    right: -45px;
     background: #dc3545;
     color: white;
     padding: 8px 50px;
@@ -83,15 +79,13 @@
     font-weight: 700;
     font-size: 0.9rem;
     box-shadow: 0 4px 10px rgba(0,0,0,0.3);
-    z-index: 99999;
+    z-index: 10;
     letter-spacing: 1px;
     pointer-events: none;
   }
 </style>
 
 <div class="payment-page">
-  <!-- Test Mode Ribbon -->
-  <div class="test-mode-ribbon">Test Mode</div>
 
   <div class="container">
     <form id="paymentForm" action="${pageContext.request.contextPath}/process-payment" method="post" style="display:none;">
@@ -105,6 +99,8 @@
     </form>
 
     <div class="payment-card" id="mainPaymentCard">
+      <!-- Test Mode Ribbon -->
+      <div class="test-mode-ribbon">Test Mode</div>
       <h2 style="font-weight:800;margin-bottom:10px;">Select Payment Method</h2>
       <p style="color:rgba(255,255,255,0.7);margin-bottom:30px;">Order ID: #FH-${order.id} &bull; Total: <strong style="color:white;">₹${order.totalAmount}</strong></p>
 
@@ -116,7 +112,6 @@
           <div class="payment-method-name">Razorpay — UPI / Card / Netbanking</div>
           <div class="payment-method-desc">Pay securely via Razorpay gateway</div>
         </div>
-        <div class="razorpay-badge">Recommended</div>
       </div>
 
       <!-- UPI -->

@@ -100,16 +100,30 @@
             .catch(err => alert("An error occurred."));
         }
         </script>
-        <div class="mt-4 d-flex gap-2 flex-wrap">
-          <span style="background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.1);border-radius:6px;padding:4px 10px;font-size:0.75rem;color:rgba(255,255,255,0.9);">
-            🚀 Fast Delivery
-          </span>
-          <span style="background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.1);border-radius:6px;padding:4px 10px;font-size:0.75rem;color:rgba(255,255,255,0.9);">
-            🔒 Secure Pay
-          </span>
-          <span style="background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.1);border-radius:6px;padding:4px 10px;font-size:0.75rem;color:rgba(255,255,255,0.9);">
-            ⭐ Top Rated
-          </span>
+        <style>
+          .footer-badge {
+            background: rgba(255,255,255,0.06);
+            border: 1px solid rgba(255,255,255,0.1);
+            border-radius: 6px;
+            padding: 4px 10px;
+            font-size: 0.75rem;
+            color: rgba(255,255,255,0.9);
+            white-space: nowrap;
+          }
+          @media (max-width: 400px) {
+            .footer-badge {
+              padding: 4px 6px;
+              font-size: 0.65rem;
+            }
+            .footer-badges-container {
+              gap: 4px !important;
+            }
+          }
+        </style>
+        <div class="mt-4 d-flex gap-2 flex-nowrap footer-badges-container">
+          <span class="footer-badge">🚀 Fast Delivery</span>
+          <span class="footer-badge">🔒 Secure Pay</span>
+          <span class="footer-badge">⭐ Top Rated</span>
         </div>
       </div>
 
@@ -117,11 +131,11 @@
 
     <div style="height:1px;background:linear-gradient(to right,transparent,rgba(255,69,0,0.4),transparent);margin:40px 0;"></div>
 
-    <div class="d-flex justify-content-between align-items-center flex-wrap gap-3">
+    <div class="d-flex flex-column flex-md-row justify-content-between align-items-start align-items-md-center gap-3">
       <p style="color:rgba(255,255,255,0.85);font-size:0.85rem;margin:0;">
         © 2026 <strong style="color:#ff4500;">FoodieHub</strong>. All Rights Reserved. Made with ❤️ in India.
       </p>
-      <div class="d-flex gap-4">
+      <div class="d-flex justify-content-between justify-content-md-end gap-4 w-100 w-md-auto">
         <a href="#" style="color:rgba(255,255,255,0.85);text-decoration:none;font-size:0.8rem;" onmouseover="this.style.color='#ff4500'" onmouseout="this.style.color='rgba(255,255,255,0.85)'">Privacy Policy</a>
         <a href="#" style="color:rgba(255,255,255,0.85);text-decoration:none;font-size:0.8rem;" onmouseover="this.style.color='#ff4500'" onmouseout="this.style.color='rgba(255,255,255,0.85)'">Terms of Service</a>
       </div>
